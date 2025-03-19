@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur la literrature</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Debut style de litterature */
+        body {
+            background-color: #f8d7da;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: black;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .option-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .option-item.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .option-item.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-item.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .timer-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: black;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation pour les réponses */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Style pour les boutons de navigation */
+        .nav-button {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #212529;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge du niveau de progression */
+        .progress-badge {
+            background-color: #17a2b8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+    <!-- Fin de syle pour la page litterature -->
+</head>
+<!-- Coder, c'est comme écrire de la poésie. -->
+<body>
+
+<header class="text-center">
+    <div class="container">
+        <h1><i class="fas fa-futbol"></i> Quiz sur la literrature</h1>
+        <p class="lead">Testez vos connaissances sur le monde de la literrature</p>
+        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div id="timerContainer" class="timer-container">
+        <span id="timer">300</span>
+    </div>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <h2>Questions sur les Sports</h2>
+            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+        </div>
+        
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <span class="progress-badge">Question 1/10</span>
+                <p>Quel est le thème principal de "1984" de George Orwell ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Atlantique" onclick="selectOption(this, 'q1')"> La liberté individuelle</li>
+                    <li class="option-item" data-value="Indien" onclick="selectOption(this, 'q1')">La nature</li>
+                    <li class="option-item" data-value="Pacifique" onclick="selectOption(this, 'q1')">La technologie</li>
+                    <li class="option-item" data-value="Arctique" onclick="selectOption(this, 'q1')">L'amour</li>
+                </ul>
+                <input type="hidden" name="q1" id="q1-value">
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <span class="progress-badge">Question 2/10</span>
+                <p>Dans "Le Petit Prince" d'Antoine de Saint-Exupéry, quel est le message central du livre ? ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Victor Hugo" onclick="selectOption(this, 'q2')"> L'importance de l'amitié</li>
+                    <li class="option-item" data-value="Gustave Flaubert" onclick="selectOption(this, 'q2')">La quête de la richesse</li>
+                    <li class="option-item" data-value="Émile Zola" onclick="selectOption(this, 'q2')">La conquête de l'espace</li>
+                    <li class="option-item" data-value="Marcel Proust" onclick="selectOption(this, 'q2')">La guerre et la paix</li>
+                </ul>
+                <input type="hidden" name="q2" id="q2-value">
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <span class="progress-badge">Question 3/10</span>
+                <p>Quel est le principal conflit dans "Roméo et Juliette" de William Shakespeare ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Chine" onclick="selectOption(this, 'q3')"> La guerre entre deux royaumes</li>
+                    <li class="option-item" data-value="Japon" onclick="selectOption(this, 'q3')">L'amour interdit entre deux familles rivales</li>
+                    <li class="option-item" data-value="Corée" onclick="selectOption(this, 'q3')">La lutte pour le pouvoir</li>
+                    <li class="option-item" data-value="Thaïlande" onclick="selectOption(this, 'q3')"> La quête de la vérité</li>
+                </ul>
+                <input type="hidden" name="q3" id="q3-value">
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <span class="progress-badge">Question 4/10</span>
+                <p>Dans "L'Étranger" d'Albert Camus, quel est le sentiment principal du protagoniste, Meursault ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Au" onclick="selectOption(this, 'q4')">La joie</li>
+                    <li class="option-item" data-value="Ag" onclick="selectOption(this, 'q4')">L'angoisse</li>
+                    <li class="option-item" data-value="Fe" onclick="selectOption(this, 'q4')">L'indifférence</li>
+                    <li class="option-item" data-value="Pb" onclick="selectOption(this, 'q4')">La colère</li>
+                </ul>
+                <input type="hidden" name="q4" id="q4-value">
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <span class="progress-badge">Question 5/10</span>
+                <p> Quel est le principal sujet de "Germinal" d'Émile Zola ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="12" onclick="selectOption(this, 'q5')">La vie de la noblesse</li>
+                    <li class="option-item" data-value="16" onclick="selectOption(this, 'q5')">La lutte des ouvriers dans les mines</li>
+                    <li class="option-item" data-value="18" onclick="selectOption(this, 'q5')"> La guerre</li>
+                    <li class="option-item" data-value="21" onclick="selectOption(this, 'q5')">L'amour</li>
+                </ul>
+                <input type="hidden" name="q5" id="q5-value">
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <span class="progress-badge">Question 6/10</span>
+                <p>Dans "Le Rouge et le Noir" de Stendhal, quel est le rêve de Julien Sorel ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Sahara" onclick="selectOption(this, 'q6')">De devenir un grand écrivain</li>
+                    <li class="option-item" data-value="Gobi" onclick="selectOption(this, 'q6')">D'accéder à la noblesse</li>
+                    <li class="option-item" data-value="Antarctique" onclick="selectOption(this, 'q6')">De voyager à travers l'Europe</li>
+                    <li class="option-item" data-value="Kalahari" onclick="selectOption(this, 'q6')">De fonder une famille</li>
+                </ul>
+                <input type="hidden" name="q6" id="q6-value">
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <span class="progress-badge">Question 7/10</span>
+                <p>Dans "Madame Bovary" de Gustave Flaubert, quel est le principal désir d'Emma Bovary ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Sahara" onclick="selectOption(this, 'q7')">De devenir écrivain</li>
+                    <li class="option-item" data-value="Gobi" onclick="selectOption(this, 'q7')">De vivre une vie de luxe et d'aventure</li>
+                    <li class="option-item" data-value="Antarctique" onclick="selectOption(this, 'q7')">De voyager à travers le monde</li>
+                    <li class="option-item" data-value="Kalahari" onclick="selectOption(this, 'q7')">De fonder une famille nombreuse</li>
+                </ul>
+                <input type="hidden" name="q7" id="q7-value">
+            </div>
+                
+            
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <span class="progress-badge">Question 8/10</span>
+                <p> Quel est le principal dilemme moral dans "Crime et Châtiment" de Fiodor Dostoïevski ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="15" onclick="selectOption(this, 'q8')">La loyauté envers la famille</li>
+                    <li class="option-item" data-value="21" onclick="selectOption(this, 'q8')">La justification du meurtre pour un bien supérieur</li>
+                    <li class="option-item" data-value="25" onclick="selectOption(this, 'q8')">La recherche de la vérité</li>
+                    <li class="option-item" data-value="30" onclick="selectOption(this, 'q8')">L'amour non réciproque</li>
+                </ul>
+                <input type="hidden" name="q8" id="q8-value">
+            </div>
+            
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <span class="progress-badge">Question 9/10</span>
+                <p> Dans "Les Fleurs du mal" de Charles Baudelaire, quel est le thème central ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Inde" onclick="selectOption(this, 'q9')"> La nature</li>
+                    <li class="option-item" data-value="Angleterre" onclick="selectOption(this, 'q9')">La beauté et la décadence</li>
+                    <li class="option-item" data-value="Australie" onclick="selectOption(this, 'q9')">L'amour familial</li>
+                    <li class="option-item" data-value="Pakistan" onclick="selectOption(this, 'q9')">La guerre</li>
+                </ul>
+                <input type="hidden" name="q9" id="q9-value">
+            </div>
+            
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <span class="progress-badge">Question 10/10</span>
+                <p> Quel est le principal conflit dans "Le Vieil Homme et la Mer" d'Ernest Hemingway ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="France" onclick="selectOption(this, 'q10')">La lutte contre la nature</li>
+                    <li class="option-item" data-value="Grèce" onclick="selectOption(this, 'q10')">La guerre</li>
+                    <li class="option-item" data-value="Italie" onclick="selectOption(this, 'q10')"> La quête de l'amour</li>
+                    <li class="option-item" data-value="Espagne" onclick="selectOption(this, 'q10')">La rivalité entre pêcheurs</li>
+                </ul>
+                <input type="hidden" name="q10" id="q10-value">
+            </div>
+            
+            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
+                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            </button>
+        </form>
+    </div>
+    
+    <div id="resultContainer" class="result-container">
+        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+        <div class="score-display">
+            <span id="score">0</span>/10
+        </div>
+        <div id="feedback" class="mb-4"></div>
+        
+        <button class="btn btn-primary mr-2" onclick="showAnswers()">
+            <i class="fas fa-eye"></i> Voir les réponses
+        </button>
+        <a href="sport.html" class="btn btn-info mr-2">
+            <i class="fas fa-redo"></i> Refaire le quiz
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Données du quiz
+    const quizData = {
+        q1: { answer: "La liberté individuelle", explanation: "1984 explore la répression de la liberté individuelle par un régime totalitaire, mettant en lumière les dangers de la surveillance et du contrôle social." },
+        q2: { answer: "L'importance de l'amitié", explanation: "Le livre souligne que les relations humaines et l'amitié sont essentielles pour comprendre la vie et trouver un sens à son existence." },
+        q3: { answer: "L'amour interdit entre deux familles rivales", explanation: "L'histoire tragique de Roméo et Juliette illustre comment l'amour peut être entravé par des conflits familiaux et sociaux." },
+        q4: { answer: "L'indifférence", explanation: "Meursault incarne l'absurdité de la vie et son indifférence face aux événements souligne le thème de l'aliénation." },
+        q5: { answer: "La lutte des ouvriers dans les mines", explanation: "Germinal dépeint la lutte des classes et les conditions de vie difficiles des mineurs, mettant en avant les injustices sociales." },
+        q6: { answer: "D'accéder à la noblesse", explanation: "Julien Sorel aspire à s'élever socialement et à conquérir le monde aristocratique, illustrant les tensions entre ambition et réalité sociale." },
+        q7: { answer: "B", explanation: "Dans Madame Bovary, le principal désir d'Emma Bovary est de vivre une vie de luxe et d'aventure, ce qui la pousse à rechercher des expériences romantiques et à s'éloigner de la monotonie de sa vie provinciale, entraînant ainsi sa chute tragique." },
+        q8: { answer: "La justification du meurtre pour un bien supérieur", explanation: "Raskolnikov lutte avec les conséquences morales de son acte, questionnant la nature du bien et du mal dans une société complexe." },
+        q9: { answer: "La beauté et la décadence", explanation: "Baudelaire explore la dualité de la beauté et de la souffrance, révélant la complexité de l'expérience humaine." },
+        q10: { answer: "La lutte contre la nature", explanation: " Le roman illustre la détermination et la résilience de l'homme face aux forces de la nature, symbolisant la lutte pour la survie." }
+    };
+    
+    // Variables globales
+    let selectedOptions = {};
+    let timerInterval;
+    let timeLeft = 300; // 5 minutes
+    
+    // Fonction pour initialiser le quiz
+    function initQuiz() {
+        updateProgressBar();
+        startTimer();
+    }
+    
+    // Fonction pour sélectionner une option
+    function selectOption(element, questionId) {
+        // Désélectionner toutes les options pour cette question
+        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Sélectionner l'option cliquée
+        element.classList.add('selected');
+        
+        // Stocker la valeur
+        const value = element.getAttribute('data-value');
+        document.getElementById(`${questionId}-value`).value = value;
+        selectedOptions[questionId] = value;
+        
+        // Mettre à jour la barre de progression
+        updateProgressBar();
+    }
+    
+    // Mettre à jour la barre de progression
+    function updateProgressBar() {
+        const totalQuestions = 10;
+        const answeredQuestions = Object.keys(selectedOptions).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+    
+    // Fonction pour démarrer le minuteur
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Formater le temps (minutes:secondes)
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Changer la couleur quand il reste peu de temps
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#dc3545';
+            }
+            
+            // Si le temps est écoulé
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+    
+    // Fonction pour soumettre le quiz
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        // Calculer le score
+        let score = 0;
+        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+            if (selectedValue === quizData[questionId].answer) {
+                score++;
+            }
+        }
+        
+        // Afficher le score
+        document.getElementById('score').textContent = score;
+        
+        // Afficher le feedback basé sur le score
+        const feedbackElement = document.getElementById('feedback');
+        let feedbackMessage = '';
+        
+        if (score >= 8) {
+            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable expert de la litterature !</div>';
+        } else if (score >= 5) {
+            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances en litterature.</div>';
+        } else {
+            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Le monde de la litterature est vaste et passionnant.</div>';
+        }
+        
+        feedbackElement.innerHTML = feedbackMessage;
+        
+        // Afficher les résultats
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+    
+    // Fonction pour afficher les réponses correctes
+    function showAnswers() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        
+        // Désactiver tous les éléments cliquables
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.onclick = null;
+            item.style.cursor = 'default';
+        });
+        
+        // Cacher le bouton de soumission
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Pour chaque question
+        for (const [questionId, data] of Object.entries(quizData)) {
+            const correctAnswer = data.answer;
+            const selectedValue = selectedOptions[questionId] || '';
+            
+            // Marquer les réponses correctes et incorrectes
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                const optionValue = item.getAttribute('data-value');
+                
+                if (optionValue === correctAnswer) {
+                    item.classList.add('correct');
+                    // Ajouter l'explication
+                    const explanation = document.createElement('div');
+                    explanation.classList.add('alert', 'alert-success', 'mt-2');
+                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                    document.getElementById(questionId).appendChild(explanation);
+                } else if (optionValue === selectedValue) {
+                    item.classList.add('incorrect');
+                }
+            });
+        }
+        
+        // Ajouter un bouton pour revenir aux résultats
+        const backButton = document.createElement('button');
+        backButton.classList.add('btn', 'btn-primary', 'mt-4');
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+        backButton.onclick = function() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        };
+        document.getElementById('quizForm').appendChild(backButton);
+    }
+    
+    // Démarrer le quiz au chargement de la page
+    window.onload = initQuiz;
+</script>
+</body>
+</html>

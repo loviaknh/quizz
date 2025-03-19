@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur la literrature</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8d7da;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: black;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .option-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .option-item.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .option-item.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-item.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .timer-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: black;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation pour les réponses */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Style pour les boutons de navigation */
+        .nav-button {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #212529;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge du niveau de progression */
+        .progress-badge {
+            background-color: #17a2b8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<header class="text-center">
+    <div class="container">
+        <h1><i class="fas fa-palette"></i> Quiz sur l'art</h1>
+        <p class="lead">Testez vos connaissances dans le domaine de l'art</p>
+        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div id="timerContainer" class="timer-container">
+        <span id="timer">300</span>
+    </div>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <h2>Questions sur l'Art</h2>
+            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+        </div>
+        
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <span class="progress-badge">Question 1/10</span>
+                <p><i class="fas fa-paint-brush"></i> Qui a peint "La Nuit étoilée" ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Claude Monet" onclick="selectOption(this, 'q1')">Claude Monet</li>
+                    <li class="option-item" data-value="Vincent van Gogh" onclick="selectOption(this, 'q1')">Vincent van Gogh</li>
+                    <li class="option-item" data-value="Salvador Dalí" onclick="selectOption(this, 'q1')">Salvador Dalí</li>
+                    <li class="option-item" data-value="Édouard Manet" onclick="selectOption(this, 'q1')">Édouard Manet</li>
+                </ul>
+                <input type="hidden" name="q1" id="q1-value">
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <span class="progress-badge">Question 2/10</span>
+                <p><i class="fas fa-award"></i> Quelle œuvre a été élue "tableau le plus célèbre du monde" en 2019 ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="La Joconde" onclick="selectOption(this, 'q2')">La Joconde</li>
+                    <li class="option-item" data-value="La Cène" onclick="selectOption(this, 'q2')">La Cène</li>
+                    <li class="option-item" data-value="Le Cri" onclick="selectOption(this, 'q2')">Le Cri</li>
+                    <li class="option-item" data-value="Les Nymphéas" onclick="selectOption(this, 'q2')">Les Nymphéas</li>
+                </ul>
+                <input type="hidden" name="q2" id="q2-value">
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <span class="progress-badge">Question 3/10</span>
+                <p><i class="fas fa-palette"></i> Quel mouvement artistique est caractérisé par des formes géométriques et des lignes épurées ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Impressionnisme" onclick="selectOption(this, 'q3')">Impressionnisme</li>
+                    <li class="option-item" data-value="Baroque" onclick="selectOption(this, 'q3')">Baroque</li>
+                    <li class="option-item" data-value="Cubisme" onclick="selectOption(this, 'q3')">Cubisme</li>
+                    <li class="option-item" data-value="Art nouveau" onclick="selectOption(this, 'q3')">Art nouveau</li>
+                </ul>
+                <input type="hidden" name="q3" id="q3-value">
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <span class="progress-badge">Question 4/10</span>
+                <p><i class="fas fa-landmark"></i> Dans quel musée se trouve le tableau "Guernica" de Picasso ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Musée du Louvre" onclick="selectOption(this, 'q4')">Musée du Louvre</li>
+                    <li class="option-item" data-value="Musée Reina Sofía" onclick="selectOption(this, 'q4')">Musée Reina Sofía</li>
+                    <li class="option-item" data-value="MoMA" onclick="selectOption(this, 'q4')">MoMA</li>
+                    <li class="option-item" data-value="Musée Picasso" onclick="selectOption(this, 'q4')">Musée Picasso</li>
+                </ul>
+                <input type="hidden" name="q4" id="q4-value">
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <span class="progress-badge">Question 5/10</span>
+                <p><i class="fas fa-money-bill-wave"></i> Quelle est l'œuvre d'art la plus chère jamais vendue ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Les Joueurs de cartes" onclick="selectOption(this, 'q5')">Les Joueurs de cartes</li>
+                    <li class="option-item" data-value="Salvator Mundi" onclick="selectOption(this, 'q5')">Salvator Mundi</li>
+                    <li class="option-item" data-value="No. 5, 1948" onclick="selectOption(this, 'q5')">No. 5, 1948</li>
+                    <li class="option-item" data-value="Les Femmes d'Alger" onclick="selectOption(this, 'q5')">Les Femmes d'Alger</li>
+                </ul>
+                <input type="hidden" name="q5" id="q5-value">
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <span class="progress-badge">Question 6/10</span>
+                <p><i class="fas fa-layer-group"></i> Quelle technique artistique utilise de petits morceaux de matériaux colorés assemblés ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Mosaïque" onclick="selectOption(this, 'q6')">Mosaïque</li>
+                    <li class="option-item" data-value="Collage" onclick="selectOption(this, 'q6')">Collage</li>
+                    <li class="option-item" data-value="Pointillisme" onclick="selectOption(this, 'q6')">Pointillisme</li>
+                    <li class="option-item" data-value="Vitrail" onclick="selectOption(this, 'q6')">Vitrail</li>
+                </ul>
+                <input type="hidden" name="q6" id="q6-value">
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <span class="progress-badge">Question 7/10</span>
+                <p><i class="fas fa-university"></i> Qui a conçu la pyramide du Louvre ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Frank Gehry" onclick="selectOption(this, 'q7')">Frank Gehry</li>
+                    <li class="option-item" data-value="I.M. Pei" onclick="selectOption(this, 'q7')">I.M. Pei</li>
+                    <li class="option-item" data-value="Zaha Hadid" onclick="selectOption(this, 'q7')">Zaha Hadid</li>
+                    <li class="option-item" data-value="Le Corbusier" onclick="selectOption(this, 'q7')">Le Corbusier</li>
+                </ul>
+                <input type="hidden" name="q7" id="q7-value">
+            </div>
+            
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <span class="progress-badge">Question 8/10</span>
+                <p><i class="fas fa-camera"></i> Qui est considéré comme l'un des pionniers de la photographie ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Ansel Adams" onclick="selectOption(this, 'q8')">Ansel Adams</li>
+                    <li class="option-item" data-value="Louis Daguerre" onclick="selectOption(this, 'q8')">Louis Daguerre</li>
+                    <li class="option-item" data-value="Henri Cartier-Bresson" onclick="selectOption(this, 'q8')">Henri Cartier-Bresson</li>
+                    <li class="option-item" data-value="Man Ray" onclick="selectOption(this, 'q8')">Man Ray</li>
+                </ul>
+                <input type="hidden" name="q8" id="q8-value">
+            </div>
+            
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <span class="progress-badge">Question 9/10</span>
+                <p><i class="fas fa-drafting-compass"></i> Quel artiste a créé "L'Homme de Vitruve" ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Michel-Ange" onclick="selectOption(this, 'q9')">Michel-Ange</li>
+                    <li class="option-item" data-value="Raphaël" onclick="selectOption(this, 'q9')">Raphaël</li>
+                    <li class="option-item" data-value="Léonard de Vinci" onclick="selectOption(this, 'q9')">Léonard de Vinci</li>
+                    <li class="option-item" data-value="Donatello" onclick="selectOption(this, 'q9')">Donatello</li>
+                </ul>
+                <input type="hidden" name="q9" id="q9-value">
+            </div>
+            
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <span class="progress-badge">Question 10/10</span>
+                <p><i class="fas fa-spray-can"></i> Qui est considéré comme le pionnier du street art ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Keith Haring" onclick="selectOption(this, 'q10')">Keith Haring</li>
+                    <li class="option-item" data-value="Jean-Michel Basquiat" onclick="selectOption(this, 'q10')">Jean-Michel Basquiat</li>
+                    <li class="option-item" data-value="Banksy" onclick="selectOption(this, 'q10')">Banksy</li>
+                    <li class="option-item" data-value="Shepard Fairey" onclick="selectOption(this, 'q10')">Shepard Fairey</li>
+                </ul>
+                <input type="hidden" name="q10" id="q10-value">
+            </div>
+            
+            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
+                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            </button>
+        </form>
+    </div>
+    
+    <div id="resultContainer" class="result-container">
+        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+        <div class="score-display">
+            <span id="score">0</span>/10
+        </div>
+        <div id="feedback" class="mb-4"></div>
+        
+        <button class="btn btn-primary mr-2" onclick="showAnswers()">
+            <i class="fas fa-eye"></i> Voir les réponses
+        </button>
+        <a href="art.html" class="btn btn-info mr-2">
+            <i class="fas fa-redo"></i> Refaire le quiz
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Données du quiz
+    const quizData = {
+        q1: { answer: "Vincent van Gogh", explanation: "La Nuit étoilée est une œuvre célèbre de Vincent van Gogh, peinte en 1889 pendant son séjour à l'asile de Saint-Rémy-de-Provence." },
+        q2: { answer: "La Joconde", explanation: "La Joconde (Mona Lisa) de Léonard de Vinci est considérée comme le tableau le plus célèbre du monde et attire des millions de visiteurs chaque année au musée du Louvre." },
+        q3: { answer: "Cubisme", explanation: "Le Cubisme, développé par Pablo Picasso et Georges Braque, est caractérisé par des formes géométriques, des perspectives multiples et des compositions fragmentées." },
+        q4: { answer: "Musée Reina Sofía", explanation: "Guernica, l'œuvre monumentale de Pablo Picasso créée en réponse au bombardement de la ville basque de Guernica, est exposée au Musée Reina Sofía à Madrid." },
+        q5: { answer: "Salvator Mundi", explanation: "Salvator Mundi, attribué à Léonard de Vinci, a été vendu aux enchères en 2017 pour 450,3 millions de dollars, ce qui en fait l'œuvre d'art la plus chère jamais vendue." },
+        q6: { answer: "Mosaïque", explanation: "La mosaïque est une technique artistique utilisant de petits morceaux de matériaux colorés (tesselles) assemblés pour créer une image ou un motif." },
+        q7: { answer: "I.M. Pei", explanation: "L'architecte sino-américain I.M. Pei a conçu la pyramide du Louvre, inaugurée en 1989, devenue aujourd'hui un symbole emblématique du musée." },
+        q8: { answer: "Louis Daguerre", explanation: "Louis Daguerre a développé le daguerréotype, l'un des premiers procédés photographiques commercialement viables, annoncé publiquement en 1839." },
+        q9: { answer: "Léonard de Vinci", explanation: "L'Homme de Vitruve est un dessin célèbre de Léonard de Vinci datant d'environ 1490, illustrant les proportions idéales du corps humain." },
+        q10: { answer: "Jean-Michel Basquiat", explanation: "Jean-Michel Basquiat, débutant comme graffeur SAMO dans les années 1970 à New York, est considéré comme l'un des pionniers qui a fait entrer le street art dans les galeries d'art." }
+    };  
+
+        // Variables globales
+        let selectedOptions = {};
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes
+    
+        // Fonction pour initialiser le quiz
+        function initQuiz() {
+            updateProgressBar();
+            startTimer();
+    };
+    
+    // Fonction pour sélectionner une option
+    function selectOption(element, questionId) {
+        // Désélectionner toutes les options pour cette question
+        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Sélectionner l'option cliquée
+        element.classList.add('selected');
+        
+        // Stocker la valeur
+        const value = element.getAttribute('data-value');
+        document.getElementById(`${questionId}-value`).value = value;
+        selectedOptions[questionId] = value;
+        
+        // Mettre à jour la barre de progression
+        updateProgressBar();
+    }
+    
+    // Mettre à jour la barre de progression
+    function updateProgressBar() {
+        const totalQuestions = 10;
+        const answeredQuestions = Object.keys(selectedOptions).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+    
+    // Fonction pour démarrer le minuteur
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Formater le temps (minutes:secondes)
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Changer la couleur quand il reste peu de temps
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#dc3545';
+            }
+            
+            // Si le temps est écoulé
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+    
+    // Fonction pour soumettre le quiz
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        // Calculer le score
+        let score = 0;
+        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+            if (selectedValue === quizData[questionId].answer) {
+                score++;
+            }
+        }
+        
+        // Afficher le score
+        document.getElementById('score').textContent = score;
+        
+        // Afficher le feedback basé sur le score
+        const feedbackElement = document.getElementById('feedback');
+        let feedbackMessage = '';
+        
+        if (score >= 8) {
+            feedbackMessage = '<div class="alert alert-success">Excellent !</div>';
+        } else if (score >= 5) {
+            feedbackMessage = '<div class="alert alert-info">Bon travail !</div>';
+        } else {
+            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre !</div>';
+        }
+        
+        feedbackElement.innerHTML = feedbackMessage;
+        
+        // Afficher les résultats
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+    
+    // Fonction pour afficher les réponses correctes
+    function showAnswers() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        
+        // Désactiver tous les éléments cliquables
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.onclick = null;
+            item.style.cursor = 'default';
+        });
+        
+        // Cacher le bouton de soumission
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Pour chaque question
+        for (const [questionId, data] of Object.entries(quizData)) {
+            const correctAnswer = data.answer;
+            const selectedValue = selectedOptions[questionId] || '';
+            
+            // Marquer les réponses correctes et incorrectes
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                const optionValue = item.getAttribute('data-value');
+                
+                if (optionValue === correctAnswer) {
+                    item.classList.add('correct');
+                    // Ajouter l'explication
+                    const explanation = document.createElement('div');
+                    explanation.classList.add('alert', 'alert-success', 'mt-2');
+                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                    document.getElementById(questionId).appendChild(explanation);
+                } else if (optionValue === selectedValue) {
+                    item.classList.add('incorrect');
+                }
+            });
+        }
+        
+        // Ajouter un bouton pour revenir aux résultats
+        const backButton = document.createElement('button');
+        backButton.classList.add('btn', 'btn-primary', 'mt-4');
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+        backButton.onclick = function() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        };
+        document.getElementById('quizForm').appendChild(backButton);
+    }
+    
+    // Démarrer le quiz au chargement de la page
+    window.onload = initQuiz;
+</script>
+</body>
+</html>

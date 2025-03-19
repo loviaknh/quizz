@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur les Animaux</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            /* Style pour la page animaux */
+            background-color: #d7f8e3;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .option-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .option-item.selected {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .option-item.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-item.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .timer-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: rgba(46,125,50,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: #2e7d32;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-badge {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation pour les réponses */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Style pour les boutons de navigation */
+        .nav-button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #1b5e20;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge du niveau de progression */
+        .progress-badge {
+            background-color: #388e3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+    <!-- Fin de syle pour la page animaux -->
+    
+</head>
+<body>
+
+<header class="text-center">
+    <div class="container">
+        <h1><i class="fas fa-paw"></i> Quiz sur les Animaux</h1>
+        <p class="lead">Testez vos connaissances sur le monde animal</p>
+        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div id="timerContainer" class="timer-container">
+        <span id="timer">300</span>
+    </div>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <h2>Questions sur les Animaux</h2>
+            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+        </div>
+        
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <span class="progress-badge">Question 1/10</span>
+                <p><i class="fas fa-horse"></i> Quel est le plus grand animal terrestre ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Éléphant d'Afrique" onclick="selectOption(this, 'q1')">Éléphant d'Afrique</li>
+                    <li class="option-item" data-value="Rhinocéros blanc" onclick="selectOption(this, 'q1')">Rhinocéros blanc</li>
+                    <li class="option-item" data-value="Girafe" onclick="selectOption(this, 'q1')">Girafe</li>
+                    <li class="option-item" data-value="Hippopotame" onclick="selectOption(this, 'q1')">Hippopotame</li>
+                </ul>
+                <input type="hidden" name="q1" id="q1-value">
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <span class="progress-badge">Question 2/10</span>
+                <p><i class="fas fa-spider"></i> Combien de pattes possède une araignée ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="6" onclick="selectOption(this, 'q2')">6</li>
+                    <li class="option-item" data-value="8" onclick="selectOption(this, 'q2')">8</li>
+                    <li class="option-item" data-value="10" onclick="selectOption(this, 'q2')">10</li>
+                    <li class="option-item" data-value="12" onclick="selectOption(this, 'q2')">12</li>
+                </ul>
+                <input type="hidden" name="q2" id="q2-value">
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <span class="progress-badge">Question 3/10</span>
+                <p><i class="fas fa-kiwi-bird"></i> Quel oiseau est incapable de voler ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Pingouin" onclick="selectOption(this, 'q3')">Pingouin</li>
+                    <li class="option-item" data-value="Autruche" onclick="selectOption(this, 'q3')">Autruche</li>
+                    <li class="option-item" data-value="Perroquet" onclick="selectOption(this, 'q3')">Perroquet</li>
+                    <li class="option-item" data-value="Colibri" onclick="selectOption(this, 'q3')">Colibri</li>
+                </ul>
+                <input type="hidden" name="q3" id="q3-value">
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <span class="progress-badge">Question 4/10</span>
+                <p><i class="fas fa-water"></i> Quel est le plus grand poisson du monde ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Grand requin blanc" onclick="selectOption(this, 'q4')">Grand requin blanc</li>
+                    <li class="option-item" data-value="Requin-baleine" onclick="selectOption(this, 'q4')">Requin-baleine</li>
+                    <li class="option-item" data-value="Espadon" onclick="selectOption(this, 'q4')">Espadon</li>
+                    <li class="option-item" data-value="Thon rouge" onclick="selectOption(this, 'q4')">Thon rouge</li>
+                </ul>
+                <input type="hidden" name="q4" id="q4-value">
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <span class="progress-badge">Question 5/10</span>
+                <p><i class="fas fa-feather-alt"></i> Quel animal peut vivre jusqu'à 150 ans ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Éléphant" onclick="selectOption(this, 'q5')">Éléphant</li>
+                    <li class="option-item" data-value="Baleine bleue" onclick="selectOption(this, 'q5')">Baleine bleue</li>
+                    <li class="option-item" data-value="Tortue géante" onclick="selectOption(this, 'q5')">Tortue géante</li>
+                    <li class="option-item" data-value="Perroquet" onclick="selectOption(this, 'q5')">Perroquet</li>
+                </ul>
+                <input type="hidden" name="q5" id="q5-value">
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <span class="progress-badge">Question 6/10</span>
+                <p><i class="fas fa-cat"></i> Quel félin est le plus rapide du monde ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Lion" onclick="selectOption(this, 'q6')">Lion</li>
+                    <li class="option-item" data-value="Tigre" onclick="selectOption(this, 'q6')">Tigre</li>
+                    <li class="option-item" data-value="Guépard" onclick="selectOption(this, 'q6')">Guépard</li>
+                    <li class="option-item" data-value="Jaguar" onclick="selectOption(this, 'q6')">Jaguar</li>
+                </ul>
+                <input type="hidden" name="q6" id="q6-value">
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <span class="progress-badge">Question 7/10</span>
+                <p><i class="fas fa-bug"></i> Combien de cœurs possède une pieuvre ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="1" onclick="selectOption(this, 'q7')">1</li>
+                    <li class="option-item" data-value="2" onclick="selectOption(this, 'q7')">2</li>
+                    <li class="option-item" data-value="3" onclick="selectOption(this, 'q7')">3</li>
+                    <li class="option-item" data-value="4" onclick="selectOption(this, 'q7')">4</li>
+                </ul>
+                <input type="hidden" name="q7" id="q7-value">
+            </div>
+            
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <span class="progress-badge">Question 8/10</span>
+                <p><i class="fas fa-frog"></i> Quel animal peut survivre plusieurs années sans boire d'eau ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Chameau" onclick="selectOption(this, 'q8')">Chameau</li>
+                    <li class="option-item" data-value="Rat-taupe nu" onclick="selectOption(this, 'q8')">Rat-taupe nu</li>
+                    <li class="option-item" data-value="Grenouille du désert" onclick="selectOption(this, 'q8')">Grenouille du désert</li>
+                    <li class="option-item" data-value="Rat kangourou" onclick="selectOption(this, 'q8')">Rat kangourou</li>
+                </ul>
+                <input type="hidden" name="q8" id="q8-value">
+            </div>
+            
+             <!-- Question 9 -->
+<div class="question" id="q9">
+    <span class="progress-badge">Question 9/10</span>
+    <p><i class="fas fa-dragon"></i> Quel est le seul mammifère capable de voler ?</p>
+    <ul class="options">
+        <li class="option-item" data-value="Écureuil volant" onclick="selectOption(this, 'q9')">Écureuil volant</li>
+        <li class="option-item" data-value="Chauve-souris" onclick="selectOption(this, 'q9')">Chauve-souris</li>
+        <li class="option-item" data-value="Lémurien volant" onclick="selectOption(this, 'q9')">Lémurien volant</li>
+        <li class="option-item" data-value="Phalanger volant" onclick="selectOption(this, 'q9')">Phalanger volant</li>
+    </ul>
+    <input type="hidden" name="q9" id="q9-value">
+</div>
+
+<!-- Question 10 -->
+<div class="question" id="q10">
+    <span class="progress-badge">Question 10/10</span>
+    <p><i class="fas fa-fish"></i> Quelle espèce animale a le plus puissant venin du monde ?</p>
+    <ul class="options">
+        <li class="option-item" data-value="Mamba noir" onclick="selectOption(this, 'q10')">Mamba noir</li>
+        <li class="option-item" data-value="Méduse-boîte" onclick="selectOption(this, 'q10')">Méduse-boîte</li>
+        <li class="option-item" data-value="Scorpion jaune" onclick="selectOption(this, 'q10')">Scorpion jaune</li>
+        <li class="option-item" data-value="Pieuvre à anneaux bleus" onclick="selectOption(this, 'q10')">Pieuvre à anneaux bleus</li>
+    </ul>
+    <input type="hidden" name="q10" id="q10-value">
+</div>
+<button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
+                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            </button>
+        </form>
+    </div>
+    
+    <div id="resultContainer" class="result-container">
+        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+        <div class="score-display">
+            <span id="score">0</span>/10
+        </div>
+        <div id="feedback" class="mb-4"></div>
+        
+        <button class="btn btn-primary mr-2" onclick="showAnswers()">
+            <i class="fas fa-eye"></i> Voir les réponses
+        </button>
+        <a href="sport.html" class="btn btn-info mr-2">
+            <i class="fas fa-redo"></i> Refaire le quiz
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Données du quiz
+    const quizData = {
+      q1: { answer: "Éléphant d'Afrique", explanation: "L'éléphant d'Afrique est le plus grand animal terrestre, pouvant peser jusqu'à 7 tonnes." },
+      q2: { answer: "8", explanation: "Les araignées possèdent 8 pattes, ce qui les classe parmi les arachnides." },
+      q3: { answer: "Autruche", explanation: "L'autruche est un oiseau incapable de voler, mais c'est le plus rapide sur terre parmi les oiseaux." },
+      q4: { answer: "Requin-baleine", explanation: "Le requin-baleine est le plus grand poisson du monde, pouvant atteindre 12 mètres de long." },
+      q5: { answer: "Tortue géante", explanation: "Certaines tortues géantes peuvent vivre jusqu'à 150 ans, voire plus." },
+      q6: { answer: "Guépard", explanation: "Le guépard est le félin le plus rapide, pouvant atteindre 110 km/h sur de courtes distances." },
+      q7: { answer: "3", explanation: "La pieuvre possède 3 cœurs : deux pour pomper le sang vers les branchies et un pour le reste du corps." },
+      q8: { answer: "Rat kangourou", explanation: "Le rat kangourou du désert peut passer toute sa vie sans boire une seule goutte d'eau liquide." },
+      q9: { answer: "Chauve-souris", explanation: "La chauve-souris est le seul mammifère capable de voler activement grâce à ses ailes membraneuses." },
+      q10: { answer: "Méduse-boîte", explanation: "La méduse-boîte (ou guêpe de mer) possède le venin le plus puissant connu, pouvant tuer un humain en quelques minutes." }
+    };
+    // Variables globales
+    let selectedOptions = {};
+    let timerInterval;
+    let timeLeft = 300; // 5 minutes
+    
+    // Fonction pour initialiser le quiz
+    function initQuiz() {
+        updateProgressBar();
+        startTimer();
+    }
+    
+    // Fonction pour sélectionner une option
+    function selectOption(element, questionId) {
+        // Désélectionner toutes les options pour cette question
+        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Sélectionner l'option cliquée
+        element.classList.add('selected');
+        
+        // Stocker la valeur
+        const value = element.getAttribute('data-value');
+        document.getElementById(`${questionId}-value`).value = value;
+        selectedOptions[questionId] = value;
+        
+        // Mettre à jour la barre de progression
+        updateProgressBar();
+    }
+    
+    // Mettre à jour la barre de progression
+    function updateProgressBar() {
+        const totalQuestions = 10;
+        const answeredQuestions = Object.keys(selectedOptions).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+    
+    // Fonction pour démarrer le minuteur
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Formater le temps (minutes:secondes)
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Changer la couleur quand il reste peu de temps
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#dc3545';
+            }
+            
+            // Si le temps est écoulé
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+    
+    // Fonction pour soumettre le quiz
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        // Calculer le score
+        let score = 0;
+        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+            if (selectedValue === quizData[questionId].answer) {
+                score++;
+            }
+        }
+        
+        // Afficher le score
+        document.getElementById('score').textContent = score;
+        
+        // Afficher le feedback basé sur le score
+        const feedbackElement = document.getElementById('feedback');
+        let feedbackMessage = '';
+        
+        if (score >= 8) {
+            feedbackMessage = '<div class="alert alert-success">Excellent !</div>';
+        } else if (score >= 5) {
+            feedbackMessage = '<div class="alert alert-info">Bon travail ! </div>';
+        } else {
+            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre !</div>';
+        }
+        
+        feedbackElement.innerHTML = feedbackMessage;
+        
+        // Afficher les résultats
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+    
+    // Fonction pour afficher les réponses correctes
+    function showAnswers() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        
+        // Désactiver tous les éléments cliquables
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.onclick = null;
+            item.style.cursor = 'default';
+        });
+        
+        // Cacher le bouton de soumission
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Pour chaque question
+        for (const [questionId, data] of Object.entries(quizData)) {
+            const correctAnswer = data.answer;
+            const selectedValue = selectedOptions[questionId] || '';
+            
+            // Marquer les réponses correctes et incorrectes
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                const optionValue = item.getAttribute('data-value');
+                
+                if (optionValue === correctAnswer) {
+                    item.classList.add('correct');
+                    // Ajouter l'explication
+                    const explanation = document.createElement('div');
+                    explanation.classList.add('alert', 'alert-success', 'mt-2');
+                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                    document.getElementById(questionId).appendChild(explanation);
+                } else if (optionValue === selectedValue) {
+                    item.classList.add('incorrect');
+                }
+            });
+        }
+        
+        // Ajouter un bouton pour revenir aux résultats
+        const backButton = document.createElement('button');
+        backButton.classList.add('btn', 'btn-primary', 'mt-4');
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+        backButton.onclick = function() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        };
+        document.getElementById('quizForm').appendChild(backButton);
+    }
+    
+    // Démarrer le quiz au chargement de la page
+    window.onload = initQuiz;
+</script>
+</body>
+</html>  

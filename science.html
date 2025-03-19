@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur les Sciences</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Debut style de science */
+        body {
+            background-color: #d7e8f8;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: #1a237e;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .option-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .option-item.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .option-item.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-item.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .timer-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: rgba(26,35,126,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: #1a237e;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-badge {
+            background-color: #3f51b5;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation pour les réponses */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Style pour les boutons de navigation */
+        .nav-button {
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #303f9f;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge du niveau de progression */
+        .progress-badge {
+            background-color: #00bcd4;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<!-- Coder, c'est comme écrire de la poésie. -->
+<body>
+
+<header class="text-center">
+    <div class="container">
+        <h1><i class="fas fa-atom"></i> Quiz sur les Sciences</h1>
+        <p class="lead">Testez vos connaissances sur le monde scientifique</p>
+        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div id="timerContainer" class="timer-container">
+        <span id="timer">300</span>
+    </div>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <h2>Questions sur les Sciences</h2>
+            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+        </div>
+        
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <span class="progress-badge">Question 1/10</span>
+                <p><i class="fas fa-flask"></i> Quel est l'élément chimique dont le symbole est Fe ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Fer" onclick="selectOption(this, 'q1')">Fer</li>
+                    <li class="option-item" data-value="Fluor" onclick="selectOption(this, 'q1')">Fluor</li>
+                    <li class="option-item" data-value="Francium" onclick="selectOption(this, 'q1')">Francium</li>
+                    <li class="option-item" data-value="Fermium" onclick="selectOption(this, 'q1')">Fermium</li>
+                </ul>
+                <input type="hidden" name="q1" id="q1-value">
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <span class="progress-badge">Question 2/10</span>
+                <p><i class="fas fa-dna"></i> Quelle est la loi fondamentale de la génétique publiée par Gregor Mendel ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="La loi de la dominance" onclick="selectOption(this, 'q2')">La loi de la dominance</li>
+                    <li class="option-item" data-value="La loi de ségrégation" onclick="selectOption(this, 'q2')">La loi de ségrégation</li>
+                    <li class="option-item" data-value="La loi de l'assortiment indépendant" onclick="selectOption(this, 'q2')">La loi de l'assortiment indépendant</li>
+                    <li class="option-item" data-value="La loi de l'hérédité" onclick="selectOption(this, 'q2')">La loi de l'hérédité</li>
+                </ul>
+                <input type="hidden" name="q2" id="q2-value">
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <span class="progress-badge">Question 3/10</span>
+                <p><i class="fas fa-atom"></i> Quelle particule subatomique a une charge positive ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Électron" onclick="selectOption(this, 'q3')">Électron</li>
+                    <li class="option-item" data-value="Proton" onclick="selectOption(this, 'q3')">Proton</li>
+                    <li class="option-item" data-value="Neutron" onclick="selectOption(this, 'q3')">Neutron</li>
+                    <li class="option-item" data-value="Photon" onclick="selectOption(this, 'q3')">Photon</li>
+                </ul>
+                <input type="hidden" name="q3" id="q3-value">
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <span class="progress-badge">Question 4/10</span>
+                <p><i class="fas fa-wave-square"></i> Quelle est l'unité de mesure de la fréquence ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Watt" onclick="selectOption(this, 'q4')">Watt</li>
+                    <li class="option-item" data-value="Joule" onclick="selectOption(this, 'q4')">Joule</li>
+                    <li class="option-item" data-value="Hertz" onclick="selectOption(this, 'q4')">Hertz</li>
+                    <li class="option-item" data-value="Pascal" onclick="selectOption(this, 'q4')">Pascal</li>
+                </ul>
+                <input type="hidden" name="q4" id="q4-value">
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <span class="progress-badge">Question 5/10</span>
+                <p><i class="fas fa-microscope"></i> Quelle est la plus petite unité structurale et fonctionnelle de la vie ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Atome" onclick="selectOption(this, 'q5')">Atome</li>
+                    <li class="option-item" data-value="Molécule" onclick="selectOption(this, 'q5')">Molécule</li>
+                    <li class="option-item" data-value="Cellule" onclick="selectOption(this, 'q5')">Cellule</li>
+                    <li class="option-item" data-value="Tissu" onclick="selectOption(this, 'q5')">Tissu</li>
+                </ul>
+                <input type="hidden" name="q5" id="q5-value">
+            </div>
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <span class="progress-badge">Question 6/10</span>
+                <p><i class="fas fa-moon"></i> Quelle est la distance moyenne entre la Terre et la Lune ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="184 000 km" onclick="selectOption(this, 'q6')">184 000 km</li>
+                    <li class="option-item" data-value="284 000 km" onclick="selectOption(this, 'q6')">284 000 km</li>
+                    <li class="option-item" data-value="384 000 km" onclick="selectOption(this, 'q6')">384 000 km</li>
+                    <li class="option-item" data-value="484 000 km" onclick="selectOption(this, 'q6')">484 000 km</li>
+                </ul>
+                <input type="hidden" name="q6" id="q6-value">
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <span class="progress-badge">Question 7/10</span>
+                <p><i class="fas fa-chart-line"></i> Quelle est la formule chimique de l'eau ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="H2O" onclick="selectOption(this, 'q7')">H2O</li>
+                    <li class="option-item" data-value="CO2" onclick="selectOption(this, 'q7')">CO2</li>
+                    <li class="option-item" data-value="O2" onclick="selectOption(this, 'q7')">O2</li>
+                    <li class="option-item" data-value="H2O2" onclick="selectOption(this, 'q7')">H2O2</li>
+                </ul>
+                <input type="hidden" name="q7" id="q7-value">
+            </div>
+            
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <span class="progress-badge">Question 8/10</span>
+                <p><i class="fas fa-flask"></i> Qui a formulé la théorie de la relativité ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Isaac Newton" onclick="selectOption(this, 'q8')">Isaac Newton</li>
+                    <li class="option-item" data-value="Albert Einstein" onclick="selectOption(this, 'q8')">Albert Einstein</li>
+                    <li class="option-item" data-value="Niels Bohr" onclick="selectOption(this, 'q8')">Niels Bohr</li>
+                    <li class="option-item" data-value="Marie Curie" onclick="selectOption(this, 'q8')">Marie Curie</li>
+                </ul>
+                <input type="hidden" name="q8" id="q8-value">
+            </div>
+            
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <span class="progress-badge">Question 9/10</span>
+                <p><i class="fas fa-leaf"></i> Quel est le processus par lequel les plantes transforment la lumière en énergie ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Photosynthèse" onclick="selectOption(this, 'q9')">Photosynthèse</li>
+                    <li class="option-item" data-value="Respiration" onclick="selectOption(this, 'q9')">Respiration</li>
+                    <li class="option-item" data-value="Transpiration" onclick="selectOption(this, 'q9')">Transpiration</li>
+                    <li class="option-item" data-value="Fermentation" onclick="selectOption(this, 'q9')">Fermentation</li>
+                </ul>
+                <input type="hidden" name="q9" id="q9-value">
+            </div>
+            
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <span class="progress-badge">Question 10/10</span>
+                <p><i class="fas fa-brain"></i> Qui a découvert la pénicilline ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Louis Pasteur" onclick="selectOption(this, 'q10')">Louis Pasteur</li>
+                    <li class="option-item" data-value="Alexander Fleming" onclick="selectOption(this, 'q10')">Alexander Fleming</li>
+                    <li class="option-item" data-value="Robert Koch" onclick="selectOption(this, 'q10')">Robert Koch</li>
+                    <li class="option-item" data-value="Jonas Salk" onclick="selectOption(this, 'q10')">Jonas Salk</li>
+                </ul>
+                <input type="hidden" name="q10" id="q10-value">
+            </div>
+            
+            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
+                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            </button>
+        </form>
+    </div>
+            
+    <div id="resultContainer" class="result-container">
+        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+        <div class="score-display">
+            <span id="score">0</span>/10
+        </div>
+        <div id="feedback" class="mb-4"></div>
+        
+        <button class="btn btn-primary mr-2" onclick="showAnswers()">
+            <i class="fas fa-eye"></i> Voir les réponses
+        </button>
+        <a href="science.html" class="btn btn-info mr-2">
+            <i class="fas fa-redo"></i> Refaire le quiz
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>            
+    // Données du quiz
+    const quizData = {
+        q1: { answer: "Big Bang", explanation: "La théorie du Big Bang est le modèle cosmologique dominant qui explique l'origine de l'univers." },
+        q2: { answer: "La loi de ségrégation", explanation: "La loi de ségrégation de Mendel stipule que les deux allèles d'un gène se séparent lors de la formation des gamètes." },
+        q3: { answer: "Proton", explanation: "Le proton est une particule subatomique avec une charge électrique positive." },
+        q4: { answer: "Hertz", explanation: "Le hertz (Hz) est l'unité de mesure de la fréquence dans le système international." },
+        q5: { answer: "Cellule", explanation: "La cellule est considérée comme l'unité structurale et fonctionnelle de base de tous les organismes vivants." },
+        q6: { answer: "384 000 km", explanation: "La distance moyenne entre la Terre et la Lune est d'environ 384 000 kilomètres." },
+        q7: { answer: "H2O", explanation: "L'eau est composée de deux atomes d'hydrogène et un atome d'oxygène, d'où sa formule H2O." },
+        q8: { answer: "Albert Einstein", explanation: "Albert Einstein a formulé la théorie de la relativité restreinte en 1905 et la relativité générale en 1915." },
+        q9: { answer: "Photosynthèse", explanation: "La photosynthèse est le processus biochimique par lequel les plantes utilisent la lumière pour produire de l'énergie." },
+        q10: { answer: "Alexander Fleming", explanation: "Alexander Fleming a découvert la pénicilline en 1928, ce qui a révolutionné le traitement des infections bactériennes." }
+    };
+
+    // Variables globales
+    let selectedOptions = {};
+    let timerInterval;
+    let timeLeft = 300; // 5 minutes
+
+    // Fonction pour initialiser le quiz
+    function initQuiz() {
+        updateProgressBar();
+        startTimer();
+    }
+
+    // Fonction pour sélectionner une option
+    function selectOption(element, questionId) {
+        // Désélectionner toutes les options pour cette question
+        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Sélectionner l'option cliquée
+        element.classList.add('selected');
+        
+        // Stocker la valeur
+        const value = element.getAttribute('data-value');
+        document.getElementById(`${questionId}-value`).value = value;
+        selectedOptions[questionId] = value;
+        
+        // Mettre à jour la barre de progression
+        updateProgressBar();
+    }
+
+    // Mettre à jour la barre de progression
+    function updateProgressBar() {
+        const totalQuestions = 10;
+        const answeredQuestions = Object.keys(selectedOptions).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+
+    // Fonction pour démarrer le minuteur
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Formater le temps (minutes:secondes)
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Changer la couleur quand il reste peu de temps
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#dc3545';
+            }
+            
+            // Si le temps est écoulé
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+
+    // Fonction pour soumettre le quiz
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        // Calculer le score
+        let score = 0;
+        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+            if (selectedValue === quizData[questionId].answer) {
+                score++;
+            }
+        }
+        
+        // Afficher le score
+        document.getElementById('score').textContent = score;
+        
+        // Afficher le feedback basé sur le score
+        const feedbackElement = document.getElementById('feedback');
+        let feedbackMessage = '';
+        
+        if (score >= 8) {
+            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable scientifique en herbe !</div>';
+        } else if (score >= 5) {
+            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de solides connaissances scientifiques.</div>';
+        } else {
+            feedbackMessage = '<div class="alert alert-warning">Continuez à explorer ! Le monde des sciences est vaste et fascinant.</div>';
+        }
+        
+        feedbackElement.innerHTML = feedbackMessage;
+        
+        // Afficher les résultats
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+
+    // Fonction pour afficher les réponses correctes
+    function showAnswers() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        
+        // Désactiver tous les éléments cliquables
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.onclick = null;
+            item.style.cursor = 'default';
+        });
+        
+        // Cacher le bouton de soumission
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Pour chaque question
+        for (const [questionId, data] of Object.entries(quizData)) {
+            const correctAnswer = data.answer;
+            const selectedValue = selectedOptions[questionId] || '';
+            
+            // Marquer les réponses correctes et incorrectes
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                const optionValue = item.getAttribute('data-value');
+                
+                if (optionValue === correctAnswer) {
+                    item.classList.add('correct');
+                    // Ajouter l'explication
+                    const explanation = document.createElement('div');
+                    explanation.classList.add('alert', 'alert-success', 'mt-2');
+                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                    document.getElementById(questionId).appendChild(explanation);
+                } else if (optionValue === selectedValue) {
+                    item.classList.add('incorrect');
+                }
+            });
+        }
+    
+    // Ajouter un bouton pour revenir aux résultats
+    const backButton = document.createElement('button');
+    backButton.classList.add('btn', 'btn-primary', 'mt-4');
+    backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+    backButton.onclick = function() {
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    };
+    document.getElementById('quizForm').appendChild(backButton);
+}
+
+// Démarrer le quiz au chargement de la page
+window.onload = initQuiz;
+</script>
+</body>
+</html>

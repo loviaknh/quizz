@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interactif</title>
+    <!-- Lien vers Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lien vers Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Lien vers le fichier CSS externe -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<!-- Coder, c'est comme écrire de la poésie. -->
+<body>
+
+    <header class="text-center">
+        <div class="container">
+            <div class="dropdown">
+                <button class="btn header-button dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Allez vers un thème
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="musique.html"><i class="fas fa-music"></i> Musique</a>
+                    <a class="dropdown-item" href="cuisine.html"><i class="fas fa-utensils"></i> Cuisine</a>
+                    <a class="dropdown-item" href="technologie.html"><i class="fas fa-laptop"></i> Technologie</a>
+                    <a class="dropdown-item" href="art.html"><i class="fas fa-paint-brush"></i> Art</a>
+                    <a class="dropdown-item" href="sport.html"><i class="fas fa-futbol"></i> Sports</a>
+                    <a class="dropdown-item" href="histoire.html"><i class="fas fa-history"></i> Histoire</a>
+                    <a class="dropdown-item" href="geographie.html"><i class="fas fa-globe"></i> Géographie</a>
+                    <a class="dropdown-item" href="cinema.html"><i class="fas fa-film"></i> Cinéma</a>
+                    <a class="dropdown-item" href="litterature.html"><i class="fas fa-book"></i> Littérature</a>
+                    <a class="dropdown-item" href="science.html"><i class="fas fa-flask"></i> Sciences</a>
+                    <a class="dropdown-item" href="culture.html"><i class="fas fa-globe"></i> Culture Générale</a>
+                    <a class="dropdown-item" href="animaux.html"><i class="fas fa-paw"></i> Animaux</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="image-container">
+        <img src="image/" alt="Image de fond">
+    </div>
+    <main>
+        <div class="main-content">
+            <div class="container text-left">
+                <h1 class="quiz-title">Faites un quiz et vérifiez vos connaissances</h1>
+                <div class="row">
+                    <!-- Carte Musique -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="musique.html" class="quiz-card">
+                            <img src="image/img1.jpg" class="card-img-top" alt="Musique">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-music"></i> Musique</h5>
+                                <p class="card-text">Testez vos connaissances sur la musique.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Cuisine -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="cuisine.html" class="quiz-card">
+                            <img src="image/cuisine1.jpg" class="card-img-top" alt="Cuisine">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-utensils"></i> Cuisine</h5>
+                                <p class="card-text">Découvrez vos compétences culinaires.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Technologie -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="technologie.html" class="quiz-card">
+                            <img src="image/technologie.jpg" class="card-img-top" alt="Technologie">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-laptop"></i> Technologie</h5>
+                                <p class="card-text">Évaluez vos connaissances en technologie.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Art -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="art.html" class="quiz-card">
+                            <img src="image/art.jpg" class="card-img-top" alt="Art">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-paint-brush"></i> Art</h5>
+                                <p class="card-text">Évaluez vos connaissances en art.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Sport -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="sport.html" class="quiz-card">
+                            <img src="image/sport.jpg" class="card-img-top" alt="Sport">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-futbol"></i> Sport</h5>
+                                <p class="card-text">Évaluez vos connaissances en sport.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Histoire -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="histoire.html" class="quiz-card">
+                            <img src="image/histoire.jpg" class="card-img-top" alt="Histoire">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-history"></i> Histoire</h5>
+                                <p class="card-text">Testez vos connaissances sur des événements historiques.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Géographie -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="geographie.html" class="quiz-card">
+                            <img src="image/geographie.jpg" class="card-img-top" alt="Géographie">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-globe"></i> Géographie</h5>
+                                <p class="card-text">Évaluez vos connaissances sur les pays et les capitales.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Cinéma -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="cinema.html" class="quiz-card">
+                            <img src="image/cinema.jpg" class="card-img-top" alt="Cinéma">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-film"></i> Cinéma</h5>
+                                <p class="card-text">Testez vos connaissances sur les films et les acteurs.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Littérature -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="litterature.html" class="quiz-card">
+                            <img src="image/litterature.jpg" class="card-img-top" alt="Littérature">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-book"></i> Littérature</h5>
+                                <p class="card-text">Évaluez vos connaissances sur les livres et les auteurs.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Sciences -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="science.html" class="quiz-card">
+                            <img src="image/science.jpg" class="card-img-top" alt="Sciences">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-flask"></i> Sciences</h5>
+                                <p class="card-text">Testez vos connaissances en biologie, chimie et physique.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Culture Générale -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="culture.html" class="quiz-card">
+                            <img src="image/culture.jpg" class="card-img-top" alt="Culture Générale">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-globe"></i> Culture Générale</h5>
+                                <p class="card-text">Un mélange de questions sur divers sujets.</p>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Carte Animaux -->
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 d-flex">
+                        <a href="animaux.html" class="quiz-card">
+                            <img src="image/animaux.jpg" class="card-img-top" alt="Animaux">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-paw"></i> Animaux</h5>
+                                <p class="card-text">Testez vos connaissances sur les espèces animales.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Script pour initialiser le dropdown -->
+    <script>
+        $(document).ready(function() {
+            // Initialiser tous les dropdowns Bootstrap
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
+</body>
+</html>

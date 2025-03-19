@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur les Sports</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Debut style de histoire */
+        body {
+            background-color: #f8d7da;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: black;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .option-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .option-item.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .option-item.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-item.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .timer-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: black;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation pour les réponses */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Style pour les boutons de navigation */
+        .nav-button {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #212529;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge du niveau de progression */
+        .progress-badge {
+            background-color: #17a2b8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+    <!-- Fin de syle pour la page histoire -->
+</head>
+<!-- Coder, c'est comme écrire de la poésie. -->
+<body>
+
+<header class="text-center">
+    <div class="container">
+        <h1><i class="fas fa-futbol"></i> Quiz sur l'histoire</h1>
+        <p class="lead">Testez vos connaissances sur le monde de l'histoire</p>
+        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div id="timerContainer" class="timer-container">
+        <span id="timer">300</span>
+    </div>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <h2>Questions sur l'Histoire</h2>
+            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+        </div>
+        
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <span class="progress-badge">Question 1/10</span>
+                <p><i class="fas fa-landmark"></i> En quelle année a débuté la Révolution française ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="1789" onclick="selectOption(this, 'q1')">1789</li>
+                    <li class="option-item" data-value="1792" onclick="selectOption(this, 'q1')">1792</li>
+                    <li class="option-item" data-value="1776" onclick="selectOption(this, 'q1')">1776</li>
+                    <li class="option-item" data-value="1804" onclick="selectOption(this, 'q1')">1804</li>
+                </ul>
+                <input type="hidden" name="q1" id="q1-value">
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <span class="progress-badge">Question 2/10</span>
+                <p><i class="fas fa-crown"></i> Qui était le premier empereur romain ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Jules César" onclick="selectOption(this, 'q2')">Jules César</li>
+                    <li class="option-item" data-value="Auguste" onclick="selectOption(this, 'q2')">Auguste</li>
+                    <li class="option-item" data-value="Néron" onclick="selectOption(this, 'q2')">Néron</li>
+                    <li class="option-item" data-value="Marc Aurèle" onclick="selectOption(this, 'q2')">Marc Aurèle</li>
+                </ul>
+                <input type="hidden" name="q2" id="q2-value">
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <span class="progress-badge">Question 3/10</span>
+                <p><i class="fas fa-ship"></i> Qui a découvert l'Amérique en 1492 ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Amerigo Vespucci" onclick="selectOption(this, 'q3')">Amerigo Vespucci</li>
+                    <li class="option-item" data-value="Christophe Colomb" onclick="selectOption(this, 'q3')">Christophe Colomb</li>
+                    <li class="option-item" data-value="Fernand de Magellan" onclick="selectOption(this, 'q3')">Fernand de Magellan</li>
+                    <li class="option-item" data-value="Vasco de Gama" onclick="selectOption(this, 'q3')">Vasco de Gama</li>
+                </ul>
+                <input type="hidden" name="q3" id="q3-value">
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <span class="progress-badge">Question 4/10</span>
+                <p><i class="fas fa-bolt"></i> Quand a pris fin la Seconde Guerre mondiale en Europe ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="8 mai 1945" onclick="selectOption(this, 'q4')">8 mai 1945</li>
+                    <li class="option-item" data-value="6 juin 1944" onclick="selectOption(this, 'q4')">6 juin 1944</li>
+                    <li class="option-item" data-value="11 novembre 1945" onclick="selectOption(this, 'q4')">11 novembre 1945</li>
+                    <li class="option-item" data-value="2 septembre 1945" onclick="selectOption(this, 'q4')">2 septembre 1945</li>
+                </ul>
+                <input type="hidden" name="q4" id="q4-value">
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <span class="progress-badge">Question 5/10</span>
+                <p><i class="fas fa-university"></i> Dans quelle ville antique se trouvait la bibliothèque considérée comme la plus grande de l'Antiquité ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Rome" onclick="selectOption(this, 'q5')">Rome</li>
+                    <li class="option-item" data-value="Athènes" onclick="selectOption(this, 'q5')">Athènes</li>
+                    <li class="option-item" data-value="Alexandrie" onclick="selectOption(this, 'q5')">Alexandrie</li>
+                    <li class="option-item" data-value="Babylone" onclick="selectOption(this, 'q5')">Babylone</li>
+                </ul>
+                <input type="hidden" name="q5" id="q5-value">
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <span class="progress-badge">Question 6/10</span>
+                <p><i class="fas fa-drum"></i> Quelle était la principale divinité de la mythologie égyptienne liée au soleil ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Osiris" onclick="selectOption(this, 'q6')">Osiris</li>
+                    <li class="option-item" data-value="Rê" onclick="selectOption(this, 'q6')">Rê</li>
+                    <li class="option-item" data-value="Anubis" onclick="selectOption(this, 'q6')">Anubis</li>
+                    <li class="option-item" data-value="Thot" onclick="selectOption(this, 'q6')">Thot</li>
+                </ul>
+                <input type="hidden" name="q6" id="q6-value">
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <span class="progress-badge">Question 7/10</span>
+                <p><i class="fas fa-chess-king"></i> Qui était le roi de France lors de la Révolution française ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Louis XIV" onclick="selectOption(this, 'q7')">Louis XIV</li>
+                    <li class="option-item" data-value="Louis XV" onclick="selectOption(this, 'q7')">Louis XV</li>
+                    <li class="option-item" data-value="Louis XVI" onclick="selectOption(this, 'q7')">Louis XVI</li>
+                    <li class="option-item" data-value="Louis XVIII" onclick="selectOption(this, 'q7')">Louis XVIII</li>
+                </ul>
+                <input type="hidden" name="q7" id="q7-value">
+            </div>
+            
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <span class="progress-badge">Question 8/10</span>
+                <p><i class="fas fa-feather-alt"></i> Quel traité mit fin à la Première Guerre mondiale ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Traité de Versailles" onclick="selectOption(this, 'q8')">Traité de Versailles</li>
+                    <li class="option-item" data-value="Traité de Westphalie" onclick="selectOption(this, 'q8')">Traité de Westphalie</li>
+                    <li class="option-item" data-value="Traité de Paris" onclick="selectOption(this, 'q8')">Traité de Paris</li>
+                    <li class="option-item" data-value="Traité de Vienne" onclick="selectOption(this, 'q8')">Traité de Vienne</li>
+                </ul>
+                <input type="hidden" name="q8" id="q8-value">
+            </div>
+            
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <span class="progress-badge">Question 9/10</span>
+                <p><i class="fas fa-drafting-compass"></i> Qui a peint la Joconde ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Michel-Ange" onclick="selectOption(this, 'q9')">Michel-Ange</li>
+                    <li class="option-item" data-value="Léonard de Vinci" onclick="selectOption(this, 'q9')">Léonard de Vinci</li>
+                    <li class="option-item" data-value="Raphaël" onclick="selectOption(this, 'q9')">Raphaël</li>
+                    <li class="option-item" data-value="Botticelli" onclick="selectOption(this, 'q9')">Botticelli</li>
+                </ul>
+                <input type="hidden" name="q9" id="q9-value">
+            </div>
+            
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <span class="progress-badge">Question 10/10</span>
+                <p><i class="fas fa-monument"></i> Quelle bataille marqua la fin de Napoléon Bonaparte ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Bataille d'Austerlitz" onclick="selectOption(this, 'q10')">Bataille d'Austerlitz</li>
+                    <li class="option-item" data-value="Bataille de Waterloo" onclick="selectOption(this, 'q10')">Bataille de Waterloo</li>
+                    <li class="option-item" data-value="Bataille de Trafalgar" onclick="selectOption(this, 'q10')">Bataille de Trafalgar</li>
+                    <li class="option-item" data-value="Bataille de Wagram" onclick="selectOption(this, 'q10')">Bataille de Wagram</li>
+                </ul>
+                <input type="hidden" name="q10" id="q10-value">
+            </div>
+            
+            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
+                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            </button>
+        </form>
+    </div>
+    
+    <div id="resultContainer" class="result-container">
+        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+        <div class="score-display">
+            <span id="score">0</span>/10
+        </div>
+        <div id="feedback" class="mb-4"></div>
+        
+        <button class="btn btn-primary mr-2" onclick="showAnswers()">
+            <i class="fas fa-eye"></i> Voir les réponses
+        </button>
+        <a href="histoire.html" class="btn btn-info mr-2">
+            <i class="fas fa-redo"></i> Refaire le quiz
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Données du quiz
+    const quizData = {
+    q1: { answer: "1789", explanation: "La Révolution française a débuté en 1789 avec la prise de la Bastille le 14 juillet et s'est poursuivie jusqu'en 1799." },
+    q2: { answer: "Auguste", explanation: "Auguste (né Octave) est considéré comme le premier empereur romain, ayant régné de 27 av. J.-C. à 14 apr. J.-C. Jules César n'était pas empereur mais dictateur." },
+    q3: { answer: "Christophe Colomb", explanation: "Christophe Colomb a découvert l'Amérique en 1492, bien qu'il pensait avoir atteint les Indes. Le continent fut nommé d'après Amerigo Vespucci." },
+    q4: { answer: "8 mai 1945", explanation: "La Seconde Guerre mondiale s'est terminée en Europe le 8 mai 1945 avec la capitulation de l'Allemagne nazie (V-E Day). La guerre s'est terminée dans le Pacifique le 2 septembre 1945." },
+    q5: { answer: "Alexandrie", explanation: "La Bibliothèque d'Alexandrie, fondée au début du 3ème siècle av. J.-C., était la plus grande et la plus importante bibliothèque du monde antique." },
+    q6: { answer: "Rê", explanation: "Rê (ou Râ) était le dieu du soleil dans la mythologie égyptienne, souvent représenté avec une tête de faucon surmontée d'un disque solaire." },
+    q7: { answer: "Louis XVI", explanation: "Louis XVI était le roi de France pendant la Révolution française. Il fut guillotiné le 21 janvier 1793." },
+    q8: { answer: "Traité de Versailles", explanation: "Le Traité de Versailles, signé le 28 juin 1919, mit officiellement fin à la Première Guerre mondiale entre l'Allemagne et les Alliés." },
+    q9: { answer: "Léonard de Vinci", explanation: "La Joconde (ou Mona Lisa) a été peinte par Léonard de Vinci entre 1503 et 1506. Elle est exposée au musée du Louvre à Paris." },
+    q10: { answer: "Bataille de Waterloo", explanation: "La bataille de Waterloo, qui eut lieu le 18 juin 1815, marqua la défaite définitive de Napoléon Bonaparte face aux armées alliées commandées par Wellington et Blücher." }
+};
+    
+    // Variables globales
+    let selectedOptions = {};
+    let timerInterval;
+    let timeLeft = 300; // 5 minutes
+    
+    // Fonction pour initialiser le quiz
+    function initQuiz() {
+        updateProgressBar();
+        startTimer();
+    }
+    
+    // Fonction pour sélectionner une option
+    function selectOption(element, questionId) {
+        // Désélectionner toutes les options pour cette question
+        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Sélectionner l'option cliquée
+        element.classList.add('selected');
+        
+        // Stocker la valeur
+        const value = element.getAttribute('data-value');
+        document.getElementById(`${questionId}-value`).value = value;
+        selectedOptions[questionId] = value;
+        
+        // Mettre à jour la barre de progression
+        updateProgressBar();
+    }
+    
+    // Mettre à jour la barre de progression
+    function updateProgressBar() {
+        const totalQuestions = 10;
+        const answeredQuestions = Object.keys(selectedOptions).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+    
+    // Fonction pour démarrer le minuteur
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Formater le temps (minutes:secondes)
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Changer la couleur quand il reste peu de temps
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#dc3545';
+            }
+            
+            // Si le temps est écoulé
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+    
+    // Fonction pour soumettre le quiz
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        // Calculer le score
+        let score = 0;
+        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+            if (selectedValue === quizData[questionId].answer) {
+                score++;
+            }
+        }
+        
+        // Afficher le score
+        document.getElementById('score').textContent = score;
+        
+        // Afficher le feedback basé sur le score
+        const feedbackElement = document.getElementById('feedback');
+        let feedbackMessage = '';
+        
+        if (score >= 8) {
+            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable historien en herbe !</div>';
+        } else if (score >= 5) {
+            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances historiques.</div>';
+        } else {
+            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! L\'histoire est riche d\'enseignements passionnants.</div>';
+        }
+        
+        feedbackElement.innerHTML = feedbackMessage;
+        
+        // Afficher les résultats
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+    
+    // Fonction pour afficher les réponses correctes
+    function showAnswers() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        
+        // Désactiver tous les éléments cliquables
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.onclick = null;
+            item.style.cursor = 'default';
+        });
+        
+        // Cacher le bouton de soumission
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Pour chaque question
+        for (const [questionId, data] of Object.entries(quizData)) {
+            const correctAnswer = data.answer;
+            const selectedValue = selectedOptions[questionId] || '';
+            
+            // Marquer les réponses correctes et incorrectes
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                const optionValue = item.getAttribute('data-value');
+                
+                if (optionValue === correctAnswer) {
+                    item.classList.add('correct');
+                    // Ajouter l'explication
+                    const explanation = document.createElement('div');
+                    explanation.classList.add('alert', 'alert-success', 'mt-2');
+                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                    document.getElementById(questionId).appendChild(explanation);
+                } else if (optionValue === selectedValue) {
+                    item.classList.add('incorrect');
+                }
+            });
+        }
+        
+        // Ajouter un bouton pour revenir aux résultats
+        const backButton = document.createElement('button');
+        backButton.classList.add('btn', 'btn-primary', 'mt-4');
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+        backButton.onclick = function() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        };
+        document.getElementById('quizForm').appendChild(backButton);
+    }
+    
+    // Démarrer le quiz au chargement de la page
+    window.onload = initQuiz;
+</script>
+</body>
+</html>

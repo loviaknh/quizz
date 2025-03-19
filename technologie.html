@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz sur les Sports</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Debut style de technologie */
+        body {
+            background-color: #f8d7da;
+            font-family: 'Roboto', sans-serif;
+            padding-bottom: 60px;
+        }
+        
+        header {
+            background-color: black;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .option-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .option-item.selected {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .option-item.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-item.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+        }
+        
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .timer-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: black;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .difficulty-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation pour les réponses */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        /* Style pour les boutons de navigation */
+        .nav-button {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #212529;
+            transform: translateY(-2px);
+        }
+        
+        /* Badge du niveau de progression */
+        .progress-badge {
+            background-color: #17a2b8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<!-- Coder, c'est comme écrire de la poésie. -->
+<body>
+
+    <header class="text-center">
+        <div class="container">
+            <h1><i class="fas fa-microchip"></i> Quiz sur la Technologie</h1>
+            <p class="lead">Testez vos connaissances sur le monde de la technologie</p>
+            <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+        </div>
+    </header>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div id="timerContainer" class="timer-container">
+        <span id="timer">300</span>
+    </div>
+    
+    <div id="quizContainer" class="quiz-container">
+        <div class="quiz-header">
+            <h2>Questions sur la Technologie</h2>
+            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+        </div>
+        
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question" id="q1">
+                <span class="progress-badge">Question 1/10</span>
+                <p><i class="fas fa-microchip"></i> Qui est considéré comme le cofondateur d'Apple avec Steve Jobs ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Steve Wozniak" onclick="selectOption(this, 'q1')">Steve Wozniak</li>
+                    <li class="option-item" data-value="Bill Gates" onclick="selectOption(this, 'q1')">Bill Gates</li>
+                    <li class="option-item" data-value="Mark Zuckerberg" onclick="selectOption(this, 'q1')">Mark Zuckerberg</li>
+                    <li class="option-item" data-value="Tim Cook" onclick="selectOption(this, 'q1')">Tim Cook</li>
+                </ul>
+                <input type="hidden" name="q1" id="q1-value">
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question" id="q2">
+                <span class="progress-badge">Question 2/10</span>
+                <p><i class="fas fa-code"></i> Quel langage de programmation a été créé par James Gosling chez Sun Microsystems en 1995 ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Python" onclick="selectOption(this, 'q2')">Python</li>
+                    <li class="option-item" data-value="Java" onclick="selectOption(this, 'q2')">Java</li>
+                    <li class="option-item" data-value="C++" onclick="selectOption(this, 'q2')">C++</li>
+                    <li class="option-item" data-value="JavaScript" onclick="selectOption(this, 'q2')">JavaScript</li>
+                </ul>
+                <input type="hidden" name="q2" id="q2-value">
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="question" id="q3">
+                <span class="progress-badge">Question 3/10</span>
+                <p><i class="fas fa-wifi"></i> Que signifie l'acronyme "Wi-Fi" ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Wireless Fidelity" onclick="selectOption(this, 'q3')">Wireless Fidelity</li>
+                    <li class="option-item" data-value="Wireless Finder" onclick="selectOption(this, 'q3')">Wireless Finder</li>
+                    <li class="option-item" data-value="Wireless Field" onclick="selectOption(this, 'q3')">Wireless Field</li>
+                    <li class="option-item" data-value="Wide Fidelity" onclick="selectOption(this, 'q3')">Wide Fidelity</li>
+                </ul>
+                <input type="hidden" name="q3" id="q3-value">
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question" id="q4">
+                <span class="progress-badge">Question 4/10</span>
+                <p><i class="fas fa-memory"></i> Quelle unité de stockage est la plus grande ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Téraoctet (To)" onclick="selectOption(this, 'q4')">Téraoctet (To)</li>
+                    <li class="option-item" data-value="Gigaoctet (Go)" onclick="selectOption(this, 'q4')">Gigaoctet (Go)</li>
+                    <li class="option-item" data-value="Pétaoctet (Po)" onclick="selectOption(this, 'q4')">Pétaoctet (Po)</li>
+                    <li class="option-item" data-value="Mégaoctet (Mo)" onclick="selectOption(this, 'q4')">Mégaoctet (Mo)</li>
+                </ul>
+                <input type="hidden" name="q4" id="q4-value">
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="question" id="q5">
+                <span class="progress-badge">Question 5/10</span>
+                <p><i class="fas fa-robot"></i> Quel terme désigne l'ensemble des technologies visant à imiter l'intelligence humaine ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Machine Learning" onclick="selectOption(this, 'q5')">Machine Learning</li>
+                    <li class="option-item" data-value="Intelligence Artificielle" onclick="selectOption(this, 'q5')">Intelligence Artificielle</li>
+                    <li class="option-item" data-value="Deep Learning" onclick="selectOption(this, 'q5')">Deep Learning</li>
+                    <li class="option-item" data-value="Robotique" onclick="selectOption(this, 'q5')">Robotique</li>
+                </ul>
+                <input type="hidden" name="q5" id="q5-value">
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question" id="q6">
+                <span class="progress-badge">Question 6/10</span>
+                <p><i class="fas fa-lock"></i> Quelle attaque informatique consiste à usurper l'identité d'une personne ou d'une organisation pour obtenir des informations sensibles ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Malware" onclick="selectOption(this, 'q6')">Malware</li>
+                    <li class="option-item" data-value="DDoS" onclick="selectOption(this, 'q6')">DDoS</li>
+                    <li class="option-item" data-value="Ransomware" onclick="selectOption(this, 'q6')">Ransomware</li>
+                    <li class="option-item" data-value="Phishing" onclick="selectOption(this, 'q6')">Phishing</li>
+                </ul>
+                <input type="hidden" name="q6" id="q6-value">
+            </div>
+            
+            <!-- Question 7 -->
+            <div class="question" id="q7">
+                <span class="progress-badge">Question 7/10</span>
+                <p><i class="fas fa-database"></i> Quel modèle de base de données organise les données dans des tables liées par des relations ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Base de données NoSQL" onclick="selectOption(this, 'q7')">Base de données NoSQL</li>
+                    <li class="option-item" data-value="Base de données relationnelle" onclick="selectOption(this, 'q7')">Base de données relationnelle</li>
+                    <li class="option-item" data-value="Base de données orientée graphe" onclick="selectOption(this, 'q7')">Base de données orientée graphe</li>
+                    <li class="option-item" data-value="Base de données hiérarchique" onclick="selectOption(this, 'q7')">Base de données hiérarchique</li>
+                </ul>
+                <input type="hidden" name="q7" id="q7-value">
+            </div>
+            
+            <!-- Question 8 -->
+            <div class="question" id="q8">
+                <span class="progress-badge">Question 8/10</span>
+                <p><i class="fas fa-network-wired"></i> Quel protocole est utilisé pour l'envoi d'emails sur Internet ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="HTTP" onclick="selectOption(this, 'q8')">HTTP</li>
+                    <li class="option-item" data-value="FTP" onclick="selectOption(this, 'q8')">FTP</li>
+                    <li class="option-item" data-value="SMTP" onclick="selectOption(this, 'q8')">SMTP</li>
+                    <li class="option-item" data-value="TCP/IP" onclick="selectOption(this, 'q8')">TCP/IP</li>
+                </ul>
+                <input type="hidden" name="q8" id="q8-value">
+            </div>
+            
+            <!-- Question 9 -->
+            <div class="question" id="q9">
+                <span class="progress-badge">Question 9/10</span>
+                <p><i class="fas fa-mobile-alt"></i> Quel système d'exploitation mobile a été développé par Google ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="iOS" onclick="selectOption(this, 'q9')">iOS</li>
+                    <li class="option-item" data-value="Android" onclick="selectOption(this, 'q9')">Android</li>
+                    <li class="option-item" data-value="Windows Phone" onclick="selectOption(this, 'q9')">Windows Phone</li>
+                    <li class="option-item" data-value="BlackBerry OS" onclick="selectOption(this, 'q9')">BlackBerry OS</li>
+                </ul>
+                <input type="hidden" name="q9" id="q9-value">
+            </div>
+            
+            <!-- Question 10 -->
+            <div class="question" id="q10">
+                <span class="progress-badge">Question 10/10</span>
+                <p><i class="fas fa-microchip"></i> Quelle technologie permet le paiement sans contact via smartphone ?</p>
+                <ul class="options">
+                    <li class="option-item" data-value="Bluetooth" onclick="selectOption(this, 'q10')">Bluetooth</li>
+                    <li class="option-item" data-value="Wi-Fi Direct" onclick="selectOption(this, 'q10')">Wi-Fi Direct</li>
+                    <li class="option-item" data-value="NFC" onclick="selectOption(this, 'q10')">NFC</li>
+                    <li class="option-item" data-value="Infrarouge" onclick="selectOption(this, 'q10')">Infrarouge</li>
+                </ul>
+                <input type="hidden" name="q10" id="q10-value">
+            </div>
+            
+            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
+                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            </button>
+        </form>
+    </div>
+    
+    
+    <div id="resultContainer" class="result-container">
+        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+        <div class="score-display">
+            <span id="score">0</span>/10
+        </div>
+        <div id="feedback" class="mb-4"></div>
+        
+        <button class="btn btn-primary mr-2" onclick="showAnswers()">
+            <i class="fas fa-eye"></i> Voir les réponses
+        </button>
+        <a href="technologie.html" class="btn btn-info mr-2">
+            <i class="fas fa-redo"></i> Refaire le quiz
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<footer class="text-center">
+    <div class="container">
+        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Données du quiz
+   const quizData = {
+    q1: { answer: "Steve Wozniak", explanation: "Steve Wozniak a cofondé Apple avec Steve Jobs en 1976. Il était l'ingénieur principal derrière les premiers ordinateurs Apple." },
+    q2: { answer: "Java", explanation: "Java a été créé par James Gosling chez Sun Microsystems en 1995. Son slogan était 'Write once, run anywhere'." },
+    q3: { answer: "Wireless Fidelity", explanation: "Wi-Fi est l'abréviation de Wireless Fidelity, bien que ce terme ait été créé après l'invention de la technologie comme un jeu de mots sur Hi-Fi." },
+    q4: { answer: "Pétaoctet (Po)", explanation: "L'ordre croissant est : Mégaoctet (Mo), Gigaoctet (Go), Téraoctet (To), puis Pétaoctet (Po)." },
+    q5: { answer: "Intelligence Artificielle", explanation: "L'Intelligence Artificielle (IA) est le terme générique désignant les technologies qui simulent l'intelligence humaine. Le Machine Learning et le Deep Learning sont des sous-domaines de l'IA." },
+    q6: { answer: "Phishing", explanation: "Le phishing est une technique d'usurpation d'identité pour obtenir des informations personnelles, souvent par email ou sites web frauduleux." },
+    q7: { answer: "Base de données relationnelle", explanation: "Les bases de données relationnelles, comme MySQL ou PostgreSQL, organisent les données dans des tables qui peuvent être liées entre elles par des relations." },
+    q8: { answer: "SMTP", explanation: "Le protocole SMTP (Simple Mail Transfer Protocol) est utilisé pour l'envoi d'emails entre serveurs." },
+    q9: { answer: "Android", explanation: "Android est un système d'exploitation mobile développé par Google, basé sur le noyau Linux et destiné principalement aux appareils mobiles à écran tactile." },
+    q10: { answer: "NFC", explanation: "La technologie NFC (Near Field Communication) permet les paiements sans contact via smartphone en communiquant avec un terminal à courte distance." }
+};
+    
+    // Variables globales
+    let selectedOptions = {};
+    let timerInterval;
+    let timeLeft = 300; // 5 minutes
+    
+    // Fonction pour initialiser le quiz
+    function initQuiz() {
+        updateProgressBar();
+        startTimer();
+    }
+    
+    // Fonction pour sélectionner une option
+    function selectOption(element, questionId) {
+        // Désélectionner toutes les options pour cette question
+        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // Sélectionner l'option cliquée
+        element.classList.add('selected');
+        
+        // Stocker la valeur
+        const value = element.getAttribute('data-value');
+        document.getElementById(`${questionId}-value`).value = value;
+        selectedOptions[questionId] = value;
+        
+        // Mettre à jour la barre de progression
+        updateProgressBar();
+    }
+    
+    // Mettre à jour la barre de progression
+    function updateProgressBar() {
+        const totalQuestions = 10;
+        const answeredQuestions = Object.keys(selectedOptions).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+    
+    // Fonction pour démarrer le minuteur
+    function startTimer() {
+        const timerElement = document.getElementById('timer');
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Formater le temps (minutes:secondes)
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // Changer la couleur quand il reste peu de temps
+            if (timeLeft <= 60) {
+                timerElement.style.color = '#dc3545';
+            }
+            
+            // Si le temps est écoulé
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+    
+    // Fonction pour soumettre le quiz
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        // Calculer le score
+        let score = 0;
+        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+            if (selectedValue === quizData[questionId].answer) {
+                score++;
+            }
+        }
+        
+        // Afficher le score
+        document.getElementById('score').textContent = score;
+        
+        // Afficher le feedback basé sur le score
+        const feedbackElement = document.getElementById('feedback');
+        let feedbackMessage = '';
+        
+        if (score >= 8) {
+            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable expert en technologie</div>';
+        } else if (score >= 5) {
+            feedbackMessage = '<div class="alert alert-info">Vous avez de bonnes connaissances technologiques. </div>';
+        } else {
+            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Le monde de la technologie évolue constamment. </div>';
+        }
+        
+        feedbackElement.innerHTML = feedbackMessage;
+        
+        // Afficher les résultats
+        document.getElementById('quizContainer').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+    
+    // Fonction pour afficher les réponses correctes
+    function showAnswers() {
+        document.getElementById('resultContainer').style.display = 'none';
+        document.getElementById('quizContainer').style.display = 'block';
+        
+        // Désactiver tous les éléments cliquables
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.onclick = null;
+            item.style.cursor = 'default';
+        });
+        
+        // Cacher le bouton de soumission
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Pour chaque question
+        for (const [questionId, data] of Object.entries(quizData)) {
+            const correctAnswer = data.answer;
+            const selectedValue = selectedOptions[questionId] || '';
+            
+            // Marquer les réponses correctes et incorrectes
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                const optionValue = item.getAttribute('data-value');
+                
+                if (optionValue === correctAnswer) {
+                    item.classList.add('correct');
+                    // Ajouter l'explication
+                    const explanation = document.createElement('div');
+                    explanation.classList.add('alert', 'alert-success', 'mt-2');
+                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                    document.getElementById(questionId).appendChild(explanation);
+                } else if (optionValue === selectedValue) {
+                    item.classList.add('incorrect');
+                }
+            });
+        }
+        
+        // Ajouter un bouton pour revenir aux résultats
+        const backButton = document.createElement('button');
+        backButton.classList.add('btn', 'btn-primary', 'mt-4');
+        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+        backButton.onclick = function() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        };
+        document.getElementById('quizForm').appendChild(backButton);
+    }
+    
+    // Démarrer le quiz au chargement de la page
+    window.onload = initQuiz;
+</script>
+</body>
+</html>
