@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz sur la literrature</title>
+    <title>Quiz sur la littérature</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -39,6 +39,11 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
+            display: none; /* Toutes les questions sont cachées par défaut */
+        }
+        
+        .question.active {
+            display: block; /* Sauf celle qui est active */
         }
         
         .question p {
@@ -84,8 +89,13 @@
             border-color: #dc3545;
         }
         
-        .submit-btn {
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
+        }
+        
+        .prev-btn, .next-btn, .submit-btn {
             padding: 10px 30px;
             font-size: 1.1rem;
         }
@@ -188,16 +198,31 @@
             margin-bottom: 10px;
             display: inline-block;
         }
+        
+        /* Style spécifique pour les boutons de navigation */
+        .prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
     </style>
     <!-- Fin de syle pour la page litterature -->
 </head>
-<!-- Coder, c'est comme écrire de la poésie. -->
 <body>
-
+<!-- Coder, c'est comme écrire de la poésie. -->
 <header class="text-center">
     <div class="container">
-        <h1><i class="fas fa-futbol"></i> Quiz sur la literrature</h1>
-        <p class="lead">Testez vos connaissances sur le monde de la literrature</p>
+        <h1><i class="fas fa-book"></i> Quiz sur la littérature</h1>
+        <p class="lead">Testez vos connaissances sur le monde de la littérature</p>
         <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
     </div>
 </header>
@@ -205,30 +230,30 @@
 <div class="container">
     <div class="progress-container">
         <div class="progress">
-            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 10%"></div>
         </div>
     </div>
     
     <div id="timerContainer" class="timer-container">
-        <span id="timer">300</span>
+        <span id="timer">5:00</span>
     </div>
     
     <div id="quizContainer" class="quiz-container">
         <div class="quiz-header">
-            <h2>Questions sur les Sports</h2>
+            <h2>Questions sur la Littérature</h2>
             <span class="difficulty-badge">Niveau: Intermédiaire</span>
         </div>
         
         <form id="quizForm">
             <!-- Question 1 -->
-            <div class="question" id="q1">
+            <div class="question active" id="q1">
                 <span class="progress-badge">Question 1/10</span>
                 <p>Quel est le thème principal de "1984" de George Orwell ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Atlantique" onclick="selectOption(this, 'q1')"> La liberté individuelle</li>
-                    <li class="option-item" data-value="Indien" onclick="selectOption(this, 'q1')">La nature</li>
-                    <li class="option-item" data-value="Pacifique" onclick="selectOption(this, 'q1')">La technologie</li>
-                    <li class="option-item" data-value="Arctique" onclick="selectOption(this, 'q1')">L'amour</li>
+                    <li class="option-item" data-value="La liberté individuelle" onclick="selectOption(this, 'q1')">La liberté individuelle</li>
+                    <li class="option-item" data-value="La nature" onclick="selectOption(this, 'q1')">La nature</li>
+                    <li class="option-item" data-value="La technologie" onclick="selectOption(this, 'q1')">La technologie</li>
+                    <li class="option-item" data-value="L'amour" onclick="selectOption(this, 'q1')">L'amour</li>
                 </ul>
                 <input type="hidden" name="q1" id="q1-value">
             </div>
@@ -236,12 +261,12 @@
             <!-- Question 2 -->
             <div class="question" id="q2">
                 <span class="progress-badge">Question 2/10</span>
-                <p>Dans "Le Petit Prince" d'Antoine de Saint-Exupéry, quel est le message central du livre ? ?</p>
+                <p>Dans "Le Petit Prince" d'Antoine de Saint-Exupéry, quel est le message central du livre ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Victor Hugo" onclick="selectOption(this, 'q2')"> L'importance de l'amitié</li>
-                    <li class="option-item" data-value="Gustave Flaubert" onclick="selectOption(this, 'q2')">La quête de la richesse</li>
-                    <li class="option-item" data-value="Émile Zola" onclick="selectOption(this, 'q2')">La conquête de l'espace</li>
-                    <li class="option-item" data-value="Marcel Proust" onclick="selectOption(this, 'q2')">La guerre et la paix</li>
+                    <li class="option-item" data-value="L'importance de l'amitié" onclick="selectOption(this, 'q2')">L'importance de l'amitié</li>
+                    <li class="option-item" data-value="La quête de la richesse" onclick="selectOption(this, 'q2')">La quête de la richesse</li>
+                    <li class="option-item" data-value="La conquête de l'espace" onclick="selectOption(this, 'q2')">La conquête de l'espace</li>
+                    <li class="option-item" data-value="La guerre et la paix" onclick="selectOption(this, 'q2')">La guerre et la paix</li>
                 </ul>
                 <input type="hidden" name="q2" id="q2-value">
             </div>
@@ -251,10 +276,10 @@
                 <span class="progress-badge">Question 3/10</span>
                 <p>Quel est le principal conflit dans "Roméo et Juliette" de William Shakespeare ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Chine" onclick="selectOption(this, 'q3')"> La guerre entre deux royaumes</li>
-                    <li class="option-item" data-value="Japon" onclick="selectOption(this, 'q3')">L'amour interdit entre deux familles rivales</li>
-                    <li class="option-item" data-value="Corée" onclick="selectOption(this, 'q3')">La lutte pour le pouvoir</li>
-                    <li class="option-item" data-value="Thaïlande" onclick="selectOption(this, 'q3')"> La quête de la vérité</li>
+                    <li class="option-item" data-value="La guerre entre deux royaumes" onclick="selectOption(this, 'q3')">La guerre entre deux royaumes</li>
+                    <li class="option-item" data-value="L'amour interdit entre deux familles rivales" onclick="selectOption(this, 'q3')">L'amour interdit entre deux familles rivales</li>
+                    <li class="option-item" data-value="La lutte pour le pouvoir" onclick="selectOption(this, 'q3')">La lutte pour le pouvoir</li>
+                    <li class="option-item" data-value="La quête de la vérité" onclick="selectOption(this, 'q3')">La quête de la vérité</li>
                 </ul>
                 <input type="hidden" name="q3" id="q3-value">
             </div>
@@ -264,10 +289,10 @@
                 <span class="progress-badge">Question 4/10</span>
                 <p>Dans "L'Étranger" d'Albert Camus, quel est le sentiment principal du protagoniste, Meursault ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Au" onclick="selectOption(this, 'q4')">La joie</li>
-                    <li class="option-item" data-value="Ag" onclick="selectOption(this, 'q4')">L'angoisse</li>
-                    <li class="option-item" data-value="Fe" onclick="selectOption(this, 'q4')">L'indifférence</li>
-                    <li class="option-item" data-value="Pb" onclick="selectOption(this, 'q4')">La colère</li>
+                    <li class="option-item" data-value="La joie" onclick="selectOption(this, 'q4')">La joie</li>
+                    <li class="option-item" data-value="L'angoisse" onclick="selectOption(this, 'q4')">L'angoisse</li>
+                    <li class="option-item" data-value="L'indifférence" onclick="selectOption(this, 'q4')">L'indifférence</li>
+                    <li class="option-item" data-value="La colère" onclick="selectOption(this, 'q4')">La colère</li>
                 </ul>
                 <input type="hidden" name="q4" id="q4-value">
             </div>
@@ -275,12 +300,12 @@
             <!-- Question 5 -->
             <div class="question" id="q5">
                 <span class="progress-badge">Question 5/10</span>
-                <p> Quel est le principal sujet de "Germinal" d'Émile Zola ?</p>
+                <p>Quel est le principal sujet de "Germinal" d'Émile Zola ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="12" onclick="selectOption(this, 'q5')">La vie de la noblesse</li>
-                    <li class="option-item" data-value="16" onclick="selectOption(this, 'q5')">La lutte des ouvriers dans les mines</li>
-                    <li class="option-item" data-value="18" onclick="selectOption(this, 'q5')"> La guerre</li>
-                    <li class="option-item" data-value="21" onclick="selectOption(this, 'q5')">L'amour</li>
+                    <li class="option-item" data-value="La vie de la noblesse" onclick="selectOption(this, 'q5')">La vie de la noblesse</li>
+                    <li class="option-item" data-value="La lutte des ouvriers dans les mines" onclick="selectOption(this, 'q5')">La lutte des ouvriers dans les mines</li>
+                    <li class="option-item" data-value="La guerre" onclick="selectOption(this, 'q5')">La guerre</li>
+                    <li class="option-item" data-value="L'amour" onclick="selectOption(this, 'q5')">L'amour</li>
                 </ul>
                 <input type="hidden" name="q5" id="q5-value">
             </div>
@@ -290,10 +315,10 @@
                 <span class="progress-badge">Question 6/10</span>
                 <p>Dans "Le Rouge et le Noir" de Stendhal, quel est le rêve de Julien Sorel ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Sahara" onclick="selectOption(this, 'q6')">De devenir un grand écrivain</li>
-                    <li class="option-item" data-value="Gobi" onclick="selectOption(this, 'q6')">D'accéder à la noblesse</li>
-                    <li class="option-item" data-value="Antarctique" onclick="selectOption(this, 'q6')">De voyager à travers l'Europe</li>
-                    <li class="option-item" data-value="Kalahari" onclick="selectOption(this, 'q6')">De fonder une famille</li>
+                    <li class="option-item" data-value="De devenir un grand écrivain" onclick="selectOption(this, 'q6')">De devenir un grand écrivain</li>
+                    <li class="option-item" data-value="D'accéder à la noblesse" onclick="selectOption(this, 'q6')">D'accéder à la noblesse</li>
+                    <li class="option-item" data-value="De voyager à travers l'Europe" onclick="selectOption(this, 'q6')">De voyager à travers l'Europe</li>
+                    <li class="option-item" data-value="De fonder une famille" onclick="selectOption(this, 'q6')">De fonder une famille</li>
                 </ul>
                 <input type="hidden" name="q6" id="q6-value">
             </div>
@@ -303,10 +328,10 @@
                 <span class="progress-badge">Question 7/10</span>
                 <p>Dans "Madame Bovary" de Gustave Flaubert, quel est le principal désir d'Emma Bovary ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Sahara" onclick="selectOption(this, 'q7')">De devenir écrivain</li>
-                    <li class="option-item" data-value="Gobi" onclick="selectOption(this, 'q7')">De vivre une vie de luxe et d'aventure</li>
-                    <li class="option-item" data-value="Antarctique" onclick="selectOption(this, 'q7')">De voyager à travers le monde</li>
-                    <li class="option-item" data-value="Kalahari" onclick="selectOption(this, 'q7')">De fonder une famille nombreuse</li>
+                    <li class="option-item" data-value="De devenir écrivain" onclick="selectOption(this, 'q7')">De devenir écrivain</li>
+                    <li class="option-item" data-value="De vivre une vie de luxe et d'aventure" onclick="selectOption(this, 'q7')">De vivre une vie de luxe et d'aventure</li>
+                    <li class="option-item" data-value="De voyager à travers le monde" onclick="selectOption(this, 'q7')">De voyager à travers le monde</li>
+                    <li class="option-item" data-value="De fonder une famille nombreuse" onclick="selectOption(this, 'q7')">De fonder une famille nombreuse</li>
                 </ul>
                 <input type="hidden" name="q7" id="q7-value">
             </div>
@@ -315,12 +340,12 @@
             <!-- Question 8 -->
             <div class="question" id="q8">
                 <span class="progress-badge">Question 8/10</span>
-                <p> Quel est le principal dilemme moral dans "Crime et Châtiment" de Fiodor Dostoïevski ?</p>
+                <p>Quel est le principal dilemme moral dans "Crime et Châtiment" de Fiodor Dostoïevski ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="15" onclick="selectOption(this, 'q8')">La loyauté envers la famille</li>
-                    <li class="option-item" data-value="21" onclick="selectOption(this, 'q8')">La justification du meurtre pour un bien supérieur</li>
-                    <li class="option-item" data-value="25" onclick="selectOption(this, 'q8')">La recherche de la vérité</li>
-                    <li class="option-item" data-value="30" onclick="selectOption(this, 'q8')">L'amour non réciproque</li>
+                    <li class="option-item" data-value="La loyauté envers la famille" onclick="selectOption(this, 'q8')">La loyauté envers la famille</li>
+                    <li class="option-item" data-value="La justification du meurtre pour un bien supérieur" onclick="selectOption(this, 'q8')">La justification du meurtre pour un bien supérieur</li>
+                    <li class="option-item" data-value="La recherche de la vérité" onclick="selectOption(this, 'q8')">La recherche de la vérité</li>
+                    <li class="option-item" data-value="L'amour non réciproque" onclick="selectOption(this, 'q8')">L'amour non réciproque</li>
                 </ul>
                 <input type="hidden" name="q8" id="q8-value">
             </div>
@@ -328,12 +353,12 @@
             <!-- Question 9 -->
             <div class="question" id="q9">
                 <span class="progress-badge">Question 9/10</span>
-                <p> Dans "Les Fleurs du mal" de Charles Baudelaire, quel est le thème central ?</p>
+                <p>Dans "Les Fleurs du mal" de Charles Baudelaire, quel est le thème central ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="Inde" onclick="selectOption(this, 'q9')"> La nature</li>
-                    <li class="option-item" data-value="Angleterre" onclick="selectOption(this, 'q9')">La beauté et la décadence</li>
-                    <li class="option-item" data-value="Australie" onclick="selectOption(this, 'q9')">L'amour familial</li>
-                    <li class="option-item" data-value="Pakistan" onclick="selectOption(this, 'q9')">La guerre</li>
+                    <li class="option-item" data-value="La nature" onclick="selectOption(this, 'q9')">La nature</li>
+                    <li class="option-item" data-value="La beauté et la décadence" onclick="selectOption(this, 'q9')">La beauté et la décadence</li>
+                    <li class="option-item" data-value="L'amour familial" onclick="selectOption(this, 'q9')">L'amour familial</li>
+                    <li class="option-item" data-value="La guerre" onclick="selectOption(this, 'q9')">La guerre</li>
                 </ul>
                 <input type="hidden" name="q9" id="q9-value">
             </div>
@@ -341,19 +366,27 @@
             <!-- Question 10 -->
             <div class="question" id="q10">
                 <span class="progress-badge">Question 10/10</span>
-                <p> Quel est le principal conflit dans "Le Vieil Homme et la Mer" d'Ernest Hemingway ?</p>
+                <p>Quel est le principal conflit dans "Le Vieil Homme et la Mer" d'Ernest Hemingway ?</p>
                 <ul class="options">
-                    <li class="option-item" data-value="France" onclick="selectOption(this, 'q10')">La lutte contre la nature</li>
-                    <li class="option-item" data-value="Grèce" onclick="selectOption(this, 'q10')">La guerre</li>
-                    <li class="option-item" data-value="Italie" onclick="selectOption(this, 'q10')"> La quête de l'amour</li>
-                    <li class="option-item" data-value="Espagne" onclick="selectOption(this, 'q10')">La rivalité entre pêcheurs</li>
+                    <li class="option-item" data-value="La lutte contre la nature" onclick="selectOption(this, 'q10')">La lutte contre la nature</li>
+                    <li class="option-item" data-value="La guerre" onclick="selectOption(this, 'q10')">La guerre</li>
+                    <li class="option-item" data-value="La quête de l'amour" onclick="selectOption(this, 'q10')">La quête de l'amour</li>
+                    <li class="option-item" data-value="La rivalité entre pêcheurs" onclick="selectOption(this, 'q10')">La rivalité entre pêcheurs</li>
                 </ul>
                 <input type="hidden" name="q10" id="q10-value">
             </div>
             
-            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
-                <i class="fas fa-check-circle"></i> Soumettre mes réponses
-            </button>
+            <div class="navigation-buttons">
+                <button type="button" id="prevBtn" class="btn prev-btn" onclick="navigateQuestion(-1)" disabled>
+                    <i class="fas fa-arrow-left"></i> Précédent
+                </button>
+                <button type="button" id="nextBtn" class="btn next-btn" onclick="navigateQuestion(1)" disabled>
+                    Suivant <i class="fas fa-arrow-right"></i>
+                </button>
+                <button type="button" id="submitBtn" class="btn submit-btn" style="display: none;" onclick="submitQuiz()">
+                    <i class="fas fa-check-circle"></i> Terminer
+                </button>
+            </div>
         </form>
     </div>
     
@@ -367,7 +400,7 @@
         <button class="btn btn-primary mr-2" onclick="showAnswers()">
             <i class="fas fa-eye"></i> Voir les réponses
         </button>
-        <a href="sport.html" class="btn btn-info mr-2">
+        <a href="litterature.html" class="btn btn-info mr-2">
             <i class="fas fa-redo"></i> Refaire le quiz
         </a>
         <a href="index.html" class="btn btn-secondary">
@@ -378,7 +411,7 @@
 
 <footer class="text-center">
     <div class="container">
-        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+        <p>&copy; 2023 Quiz Interactif. Tous droits réservés.</p>
     </div>
 </footer>
 
@@ -394,47 +427,89 @@
         q4: { answer: "L'indifférence", explanation: "Meursault incarne l'absurdité de la vie et son indifférence face aux événements souligne le thème de l'aliénation." },
         q5: { answer: "La lutte des ouvriers dans les mines", explanation: "Germinal dépeint la lutte des classes et les conditions de vie difficiles des mineurs, mettant en avant les injustices sociales." },
         q6: { answer: "D'accéder à la noblesse", explanation: "Julien Sorel aspire à s'élever socialement et à conquérir le monde aristocratique, illustrant les tensions entre ambition et réalité sociale." },
-        q7: { answer: "B", explanation: "Dans Madame Bovary, le principal désir d'Emma Bovary est de vivre une vie de luxe et d'aventure, ce qui la pousse à rechercher des expériences romantiques et à s'éloigner de la monotonie de sa vie provinciale, entraînant ainsi sa chute tragique." },
+        q7: { answer: "De vivre une vie de luxe et d'aventure", explanation: "Emma Bovary est en quête d'une existence romanesque et passionnée, loin de la monotonie provinciale, ce qui la mène à sa perte." },
         q8: { answer: "La justification du meurtre pour un bien supérieur", explanation: "Raskolnikov lutte avec les conséquences morales de son acte, questionnant la nature du bien et du mal dans une société complexe." },
         q9: { answer: "La beauté et la décadence", explanation: "Baudelaire explore la dualité de la beauté et de la souffrance, révélant la complexité de l'expérience humaine." },
-        q10: { answer: "La lutte contre la nature", explanation: " Le roman illustre la détermination et la résilience de l'homme face aux forces de la nature, symbolisant la lutte pour la survie." }
+        q10: { answer: "La lutte contre la nature", explanation: "Le roman illustre la détermination et la résilience de l'homme face aux forces de la nature, symbolisant la lutte pour la survie." }
     };
     
     // Variables globales
     let selectedOptions = {};
     let timerInterval;
     let timeLeft = 300; // 5 minutes
+    let currentQuestion = 1;
+    const totalQuestions = 10;
     
     // Fonction pour initialiser le quiz
     function initQuiz() {
         updateProgressBar();
         startTimer();
+        updateNavButtons();
     }
     
     // Fonction pour sélectionner une option
     function selectOption(element, questionId) {
-        // Désélectionner toutes les options pour cette question
-        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-            item.classList.remove('selected');
-        });
+    // Désélectionner toutes les options pour cette question
+    document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+        item.classList.remove('selected');
+    });
+    
+    // Sélectionner l'option cliquée
+    element.classList.add('selected');
+    
+    // Stocker la valeur
+    const value = element.textContent;
+    document.getElementById(`${questionId}-value`).value = value;
+    selectedOptions[questionId] = value;
+    
+    // Mettre à jour les boutons de navigation
+    updateNavButtons();
+    
+    // Mettre à jour la barre de progression
+    updateProgressBar();
+}
+    
+    // Fonction pour naviguer entre les questions
+    function navigateQuestion(direction) {
+        // Cacher la question actuelle
+        document.getElementById(`q${currentQuestion}`).classList.remove('active');
         
-        // Sélectionner l'option cliquée
-        element.classList.add('selected');
+        // Calculer la nouvelle question
+        currentQuestion += direction;
         
-        // Stocker la valeur
-        const value = element.getAttribute('data-value');
-        document.getElementById(`${questionId}-value`).value = value;
-        selectedOptions[questionId] = value;
+        // Afficher la nouvelle question
+        document.getElementById(`q${currentQuestion}`).classList.add('active');
+        
+        // Mettre à jour les boutons de navigation
+        updateNavButtons();
         
         // Mettre à jour la barre de progression
         updateProgressBar();
     }
     
+    // Fonction pour mettre à jour les boutons de navigation
+    function updateNavButtons() {
+    // Bouton précédent - désactivé si on est à la première question
+    document.getElementById('prevBtn').disabled = (currentQuestion === 1);
+    
+    // Si c'est la dernière question
+    if (currentQuestion === totalQuestions) {
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'inline-block';
+        // Activer le bouton soumettre uniquement si une réponse est sélectionnée
+        document.getElementById('submitBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+    } else {
+        // Sinon, afficher le bouton suivant
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('submitBtn').style.display = 'none';
+        // Activer le bouton suivant uniquement si une réponse est sélectionnée
+        document.getElementById('nextBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+    }
+    }
+    
     // Mettre à jour la barre de progression
     function updateProgressBar() {
-        const totalQuestions = 10;
-        const answeredQuestions = Object.keys(selectedOptions).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
+        const progress = (Object.keys(selectedOptions).length / totalQuestions) * 100;
         document.getElementById('progressBar').style.width = `${progress}%`;
     }
     
@@ -483,11 +558,11 @@
         let feedbackMessage = '';
         
         if (score >= 8) {
-            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable expert de la litterature !</div>';
+            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable expert de la littérature !</div>';
         } else if (score >= 5) {
-            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances en litterature.</div>';
+            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances en littérature.</div>';
         } else {
-            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Le monde de la litterature est vaste et passionnant.</div>';
+            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Le monde de la littérature est vaste et passionnant.</div>';
         }
         
         feedbackElement.innerHTML = feedbackMessage;
@@ -502,14 +577,20 @@
         document.getElementById('resultContainer').style.display = 'none';
         document.getElementById('quizContainer').style.display = 'block';
         
+        // Afficher toutes les questions
+        document.querySelectorAll('.question').forEach(question => {
+            question.classList.add('active');
+            question.style.marginBottom = '50px'; // Espacement entre les questions
+        });
+        
+        // Cacher les boutons de navigation
+        document.querySelector('.navigation-buttons').style.display = 'none';
+        
         // Désactiver tous les éléments cliquables
         document.querySelectorAll('.option-item').forEach(item => {
             item.onclick = null;
             item.style.cursor = 'default';
         });
-        
-        // Cacher le bouton de soumission
-        document.getElementById('submitBtn').style.display = 'none';
         
         // Pour chaque question
         for (const [questionId, data] of Object.entries(quizData)) {
@@ -518,7 +599,7 @@
             
             // Marquer les réponses correctes et incorrectes
             document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-                const optionValue = item.getAttribute('data-value');
+                const optionValue = item.textContent.trim();
                 
                 if (optionValue === correctAnswer) {
                     item.classList.add('correct');

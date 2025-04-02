@@ -13,46 +13,58 @@
             font-family: 'Roboto', sans-serif;
             padding-bottom: 60px;
         }
-        
+
         header {
             background-color: #343a40;
             color: white;
             padding: 20px 0;
             margin-bottom: 30px;
         }
-        
+
         .quiz-container {
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
             animation: fadeIn 0.5s ease;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .question {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
+            display: none; /* Hide all questions by default */
         }
-        
+
+        .question.active {
+            display: block; /* Show only the active question */
+        }
+
         .question p {
             font-size: 1.2rem;
             font-weight: 600;
             color: #333;
             margin-bottom: 15px;
         }
-        
+
         .options {
             list-style-type: none;
             padding-left: 0;
         }
-        
+
         .option-item {
             padding: 10px 15px;
             margin-bottom: 10px;
@@ -61,60 +73,67 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .option-item:hover {
             background-color: #f1f1f1;
         }
-        
+
         .option-item.selected {
             background-color: #6c757d;
             color: white;
             border-color: #6c757d;
         }
-        
+
         .option-item.correct {
             background-color: #28a745;
             color: white;
             border-color: #28a745;
         }
-        
+
         .option-item.incorrect {
             background-color: #dc3545;
             color: white;
             border-color: #dc3545;
         }
-        
-        .submit-btn {
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
+        }
+
+        .prev-btn,
+        .next-btn,
+        .submit-btn {
             padding: 10px 30px;
             font-size: 1.1rem;
         }
-        
+
         .result-container {
             display: none;
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             margin-top: 30px;
         }
-        
+
         .score-display {
             font-size: 2rem;
             font-weight: bold;
             margin: 20px 0;
         }
-        
+
         .progress-container {
             margin: 20px 0;
         }
-        
+
         .timer-container {
             position: fixed;
             top: 100px;
             right: 20px;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 15px;
             border-radius: 50%;
@@ -126,7 +145,7 @@
             font-size: 1.5rem;
             z-index: 1000;
         }
-        
+
         footer {
             background-color: #343a40;
             color: white;
@@ -135,14 +154,14 @@
             bottom: 0;
             width: 100%;
         }
-        
+
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .difficulty-badge {
             background-color: #17a2b8;
             color: white;
@@ -150,18 +169,26 @@
             border-radius: 20px;
             font-size: 0.9rem;
         }
-        
+
         /* Animation pour les réponses */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .pulse {
             animation: pulse 0.5s;
         }
-        
+
         /* Style pour les boutons de navigation */
         .nav-button {
             background-color: #343a40;
@@ -172,12 +199,12 @@
             margin: 0 5px;
             transition: all 0.3s;
         }
-        
+
         .nav-button:hover {
             background-color: #212529;
             transform: translateY(-2px);
         }
-        
+
         /* Badge du niveau de progression */
         .progress-badge {
             background-color: #17a2b8;
@@ -188,363 +215,454 @@
             margin-bottom: 10px;
             display: inline-block;
         }
+
+        /* Style spécifique pour les boutons de navigation */
+        .prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
     </style>
     <!-- Fin de syle pour la page culture -->
 </head>
 <!-- Coder, c'est comme écrire de la poésie. -->
 <body>
 
-<header class="text-center">
-    <div class="container">
-        <h1><i class="fas fa-book"></i> Quiz de Culture Générale</h1>
-        <p class="lead">Testez vos connaissances sur le monde qui nous entoure</p>
-        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
-    </div>
-</header>
+    <header class="text-center">
+        <div class="container">
+            <h1><i class="fas fa-book"></i> Quiz de Culture Générale</h1>
+            <p class="lead">Testez vos connaissances sur le monde qui nous entoure</p>
+            <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+        </div>
+    </header>
 
-<div class="container">
-    <div class="progress-container">
-        <div class="progress">
-            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 0%"></div>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+                    role="progressbar" style="width: 0%"></div>
+            </div>
         </div>
-    </div>
-    
-    <div id="timerContainer" class="timer-container">
-        <span id="timer">300</span>
-    </div>
-    
-    <div id="quizContainer" class="quiz-container">
-        <div class="quiz-header">
-            <h2>Questions de Culture Générale</h2>
-            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+
+        <div id="timerContainer" class="timer-container">
+            <span id="timer">5:00</span>
         </div>
-        
-        <form id="quizForm">
-            <!-- Question 1 -->
-            <div class="question" id="q1">
-                <span class="progress-badge">Question 1/10</span>
-                <p><i class="fas fa-landmark"></i> Quelle est la capitale de l'Australie ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Sydney" onclick="selectOption(this, 'q1')">Sydney</li>
-                    <li class="option-item" data-value="Melbourne" onclick="selectOption(this, 'q1')">Melbourne</li>
-                    <li class="option-item" data-value="Canberra" onclick="selectOption(this, 'q1')">Canberra</li>
-                    <li class="option-item" data-value="Brisbane" onclick="selectOption(this, 'q1')">Brisbane</li>
-                </ul>
-                <input type="hidden" name="q1" id="q1-value">
+
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h2>Questions de Culture Générale</h2>
+                <span class="difficulty-badge">Niveau: Intermédiaire</span>
             </div>
-            
-            <!-- Question 2 -->
-            <div class="question" id="q2">
-                <span class="progress-badge">Question 2/10</span>
-                <p><i class="fas fa-palette"></i> Qui a peint "La Joconde" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Vincent van Gogh" onclick="selectOption(this, 'q2')">Vincent van Gogh</li>
-                    <li class="option-item" data-value="Pablo Picasso" onclick="selectOption(this, 'q2')">Pablo Picasso</li>
-                    <li class="option-item" data-value="Leonardo da Vinci" onclick="selectOption(this, 'q2')">Leonardo da Vinci</li>
-                    <li class="option-item" data-value="Michel-Ange" onclick="selectOption(this, 'q2')">Michel-Ange</li>
-                </ul>
-                <input type="hidden" name="q2" id="q2-value">
+
+            <form id="quizForm">
+                <!-- Question 1 -->
+                <div class="question active" id="q1">
+                    <span class="progress-badge">Question 1/10</span>
+                    <p><i class="fas fa-landmark"></i> Quelle est la capitale de l'Australie ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Sydney" onclick="selectOption(this, 'q1')">Sydney</li>
+                        <li class="option-item" data-value="Melbourne" onclick="selectOption(this, 'q1')">Melbourne</li>
+                        <li class="option-item" data-value="Canberra" onclick="selectOption(this, 'q1')">Canberra</li>
+                        <li class="option-item" data-value="Brisbane" onclick="selectOption(this, 'q1')">Brisbane</li>
+                    </ul>
+                    <input type="hidden" name="q1" id="q1-value">
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question" id="q2">
+                    <span class="progress-badge">Question 2/10</span>
+                    <p><i class="fas fa-palette"></i> Qui a peint "La Joconde" ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Vincent van Gogh" onclick="selectOption(this, 'q2')">Vincent
+                            van Gogh</li>
+                        <li class="option-item" data-value="Pablo Picasso" onclick="selectOption(this, 'q2')">Pablo
+                            Picasso</li>
+                        <li class="option-item" data-value="Leonardo da Vinci" onclick="selectOption(this, 'q2')">
+                            Leonardo da Vinci</li>
+                        <li class="option-item" data-value="Michel-Ange" onclick="selectOption(this, 'q2')">Michel-Ange
+                        </li>
+                    </ul>
+                    <input type="hidden" name="q2" id="q2-value">
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question" id="q3">
+                    <span class="progress-badge">Question 3/10</span>
+                    <p><i class="fas fa-atom"></i> Quel est le symbole chimique de l'or ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Or" onclick="selectOption(this, 'q3')">Or</li>
+                        <li class="option-item" data-value="Au" onclick="selectOption(this, 'q3')">Au</li>
+                        <li class="option-item" data-value="Ag" onclick="selectOption(this, 'q3')">Ag</li>
+                        <li class="option-item" data-value="Fe" onclick="selectOption(this, 'q3')">Fe</li>
+                    </ul>
+                    <input type="hidden" name="q3" id="q3-value">
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question" id="q4">
+                    <span class="progress-badge">Question 4/10</span>
+                    <p><i class="fas fa-book-open"></i> Qui a écrit "Les Misérables" ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Albert Camus" onclick="selectOption(this, 'q4')">Albert Camus
+                        </li>
+                        <li class="option-item" data-value="Honoré de Balzac" onclick="selectOption(this, 'q4')">Honoré de
+                            Balzac</li>
+                        <li class="option-item" data-value="Victor Hugo" onclick="selectOption(this, 'q4')">Victor Hugo
+                        </li>
+                        <li class="option-item" data-value="Émile Zola" onclick="selectOption(this, 'q4')">Émile Zola</li>
+                    </ul>
+                    <input type="hidden" name="q4" id="q4-value">
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question" id="q5">
+                    <span class="progress-badge">Question 5/10</span>
+                    <p><i class="fas fa-globe-americas"></i> Quel est le plus grand océan du monde ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Océan Atlantique" onclick="selectOption(this, 'q5')">Océan
+                            Atlantique</li>
+                        <li class="option-item" data-value="Océan Indien" onclick="selectOption(this, 'q5')">Océan Indien
+                        </li>
+                        <li class="option-item" data-value="Océan Pacifique" onclick="selectOption(this, 'q5')">Océan
+                            Pacifique</li>
+                        <li class="option-item" data-value="Océan Arctique" onclick="selectOption(this, 'q5')">Océan
+                            Arctique</li>
+                    </ul>
+                    <input type="hidden" name="q5" id="q5-value">
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question" id="q6">
+                    <span class="progress-badge">Question 6/10</span>
+                    <p><i class="fas fa-landmark"></i> En quelle année la Déclaration des droits de l'homme et du
+                        citoyen a-t-elle été adoptée ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="1789" onclick="selectOption(this, 'q6')">1789</li>
+                        <li class="option-item" data-value="1792" onclick="selectOption(this, 'q6')">1792</li>
+                        <li class="option-item" data-value="1804" onclick="selectOption(this, 'q6')">1804</li>
+                        <li class="option-item" data-value="1815" onclick="selectOption(this, 'q6')">1815</li>
+                    </ul>
+                    <input type="hidden" name="q6" id="q6-value">
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question" id="q7">
+                    <span class="progress-badge">Question 7/10</span>
+                    <p><i class="fas fa-calculator"></i> Quel est le résultat de 7 × 8 ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="48" onclick="selectOption(this, 'q7')">48</li>
+                        <li class="option-item" data-value="54" onclick="selectOption(this, 'q7')">54</li>
+                        <li class="option-item" data-value="56" onclick="selectOption(this, 'q7')">56</li>
+                        <li class="option-item" data-value="58" onclick="selectOption(this, 'q7')">58</li>
+                    </ul>
+                    <input type="hidden" name="q7" id="q7-value">
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question" id="q8">
+                    <span class="progress-badge">Question 8/10</span>
+                    <p><i class="fas fa-microscope"></i> Quelle planète est surnommée "la planète rouge" ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Vénus" onclick="selectOption(this, 'q8')">Vénus</li>
+                        <li class="option-item" data-value="Mars" onclick="selectOption(this, 'q8')">Mars</li>
+                        <li class="option-item" data-value="Jupiter" onclick="selectOption(this, 'q8')">Jupiter</li>
+                        <li class="option-item" data-value="Mercure" onclick="selectOption(this, 'q8')">Mercure</li>
+                    </ul>
+                    <input type="hidden" name="q8" id="q8-value">
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question" id="q9">
+                    <span class="progress-badge">Question 9/10</span>
+                    <p><i class="fas fa-music"></i> Qui a composé "Les Quatre Saisons" ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Bach" onclick="selectOption(this, 'q9')">Bach</li>
+                        <li class="option-item" data-value="Mozart" onclick="selectOption(this, 'q9')">Mozart</li>
+                        <li class="option-item" data-value="Vivaldi" onclick="selectOption(this, 'q9')">Vivaldi</li>
+                        <li class="option-item" data-value="Beethoven" onclick="selectOption(this, 'q9')">Beethoven</li>
+                    </ul>
+                    <input type="hidden" name="q9" id="q9-value">
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question" id="q10">
+                    <span class="progress-badge">Question 10/10</span>
+                    <p><i class="fas fa-film"></i> Qui a réalisé le film "Titanic" ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Steven Spielberg" onclick="selectOption(this, 'q10')">Steven
+                            Spielberg</li>
+                        <li class="option-item" data-value="James Cameron" onclick="selectOption(this, 'q10')">James
+                            Cameron</li>
+                        <li class="option-item" data-value="Martin Scorsese" onclick="selectOption(this, 'q10')">Martin
+                            Scorsese</li>
+                        <li class="option-item" data-value="Christopher Nolan" onclick="selectOption(this, 'q10')">
+                            Christopher Nolan</li>
+                    </ul>
+                    <input type="hidden" name="q10" id="q10-value">
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="prevBtn" class="btn prev-btn" onclick="navigateQuestion(-1)" disabled>
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button type="button" id="nextBtn" class="btn next-btn" onclick="navigateQuestion(1)" disabled>
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="button" id="submitBtn" class="btn submit-btn" style="display: none;"
+                        onclick="submitQuiz()">
+                        <i class="fas fa-check-circle"></i> Terminer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+            <div class="score-display">
+                <span id="score">0</span>/10
             </div>
-            
-            <!-- Question 3 -->
-            <div class="question" id="q3">
-                <span class="progress-badge">Question 3/10</span>
-                <p><i class="fas fa-atom"></i> Quel est le symbole chimique de l'or ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Or" onclick="selectOption(this, 'q3')">Or</li>
-                    <li class="option-item" data-value="Au" onclick="selectOption(this, 'q3')">Au</li>
-                    <li class="option-item" data-value="Ag" onclick="selectOption(this, 'q3')">Ag</li>
-                    <li class="option-item" data-value="Fe" onclick="selectOption(this, 'q3')">Fe</li>
-                </ul>
-                <input type="hidden" name="q3" id="q3-value">
-            </div>
-            
-            <!-- Question 4 -->
-            <div class="question" id="q4">
-                <span class="progress-badge">Question 4/10</span>
-                <p><i class="fas fa-book-open"></i> Qui a écrit "Les Misérables" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Albert Camus" onclick="selectOption(this, 'q4')">Albert Camus</li>
-                    <li class="option-item" data-value="Honoré de Balzac" onclick="selectOption(this, 'q4')">Honoré de Balzac</li>
-                    <li class="option-item" data-value="Victor Hugo" onclick="selectOption(this, 'q4')">Victor Hugo</li>
-                    <li class="option-item" data-value="Émile Zola" onclick="selectOption(this, 'q4')">Émile Zola</li>
-                </ul>
-                <input type="hidden" name="q4" id="q4-value">
-            </div>
-            
-            <!-- Question 5 -->
-            <div class="question" id="q5">
-                <span class="progress-badge">Question 5/10</span>
-                <p><i class="fas fa-globe-americas"></i> Quel est le plus grand océan du monde ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Océan Atlantique" onclick="selectOption(this, 'q5')">Océan Atlantique</li>
-                    <li class="option-item" data-value="Océan Indien" onclick="selectOption(this, 'q5')">Océan Indien</li>
-                    <li class="option-item" data-value="Océan Pacifique" onclick="selectOption(this, 'q5')">Océan Pacifique</li>
-                    <li class="option-item" data-value="Océan Arctique" onclick="selectOption(this, 'q5')">Océan Arctique</li>
-                </ul>
-                <input type="hidden" name="q5" id="q5-value">
-            </div>
-            
-            <!-- Question 6 -->
-            <div class="question" id="q6">
-                <span class="progress-badge">Question 6/10</span>
-                <p><i class="fas fa-landmark"></i> En quelle année la Déclaration des droits de l'homme et du citoyen a-t-elle été adoptée ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="1789" onclick="selectOption(this, 'q6')">1789</li>
-                    <li class="option-item" data-value="1792" onclick="selectOption(this, 'q6')">1792</li>
-                    <li class="option-item" data-value="1804" onclick="selectOption(this, 'q6')">1804</li>
-                    <li class="option-item" data-value="1815" onclick="selectOption(this, 'q6')">1815</li>
-                </ul>
-                <input type="hidden" name="q6" id="q6-value">
-            </div>
-            
-            <!-- Question 7 -->
-            <div class="question" id="q7">
-                <span class="progress-badge">Question 7/10</span>
-                <p><i class="fas fa-calculator"></i> Quel est le résultat de 7 × 8 ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="48" onclick="selectOption(this, 'q7')">48</li>
-                    <li class="option-item" data-value="54" onclick="selectOption(this, 'q7')">54</li>
-                    <li class="option-item" data-value="56" onclick="selectOption(this, 'q7')">56</li>
-                    <li class="option-item" data-value="58" onclick="selectOption(this, 'q7')">58</li>
-                </ul>
-                <input type="hidden" name="q7" id="q7-value">
-            </div>
-            
-            <!-- Question 8 -->
-            <div class="question" id="q8">
-                <span class="progress-badge">Question 8/10</span>
-                <p><i class="fas fa-microscope"></i> Quelle planète est surnommée "la planète rouge" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Vénus" onclick="selectOption(this, 'q8')">Vénus</li>
-                    <li class="option-item" data-value="Mars" onclick="selectOption(this, 'q8')">Mars</li>
-                    <li class="option-item" data-value="Jupiter" onclick="selectOption(this, 'q8')">Jupiter</li>
-                    <li class="option-item" data-value="Mercure" onclick="selectOption(this, 'q8')">Mercure</li>
-                </ul>
-                <input type="hidden" name="q8" id="q8-value">
-            </div>
-            
-            <!-- Question 9 -->
-            <div class="question" id="q9">
-                <span class="progress-badge">Question 9/10</span>
-                <p><i class="fas fa-music"></i> Qui a composé "Les Quatre Saisons" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Bach" onclick="selectOption(this, 'q9')">Bach</li>
-                    <li class="option-item" data-value="Mozart" onclick="selectOption(this, 'q9')">Mozart</li>
-                    <li class="option-item" data-value="Vivaldi" onclick="selectOption(this, 'q9')">Vivaldi</li>
-                    <li class="option-item" data-value="Beethoven" onclick="selectOption(this, 'q9')">Beethoven</li>
-                </ul>
-                <input type="hidden" name="q9" id="q9-value">
-            </div>
-            
-            <!-- Question 10 -->
-            <div class="question" id="q10">
-                <span class="progress-badge">Question 10/10</span>
-                <p><i class="fas fa-film"></i> Qui a réalisé le film "Titanic" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Steven Spielberg" onclick="selectOption(this, 'q10')">Steven Spielberg</li>
-                    <li class="option-item" data-value="James Cameron" onclick="selectOption(this, 'q10')">James Cameron</li>
-                    <li class="option-item" data-value="Martin Scorsese" onclick="selectOption(this, 'q10')">Martin Scorsese</li>
-                    <li class="option-item" data-value="Christopher Nolan" onclick="selectOption(this, 'q10')">Christopher Nolan</li>
-                </ul>
-                <input type="hidden" name="q10" id="q10-value">
-            </div>
-            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
-                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            <div id="feedback" class="mb-4"></div>
+
+            <button class="btn btn-primary mr-2" onclick="showAnswers()">
+                <i class="fas fa-eye"></i> Voir les réponses
             </button>
-        </form>
-    </div>
-    
-    <div id="resultContainer" class="result-container">
-        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
-        <div class="score-display">
-            <span id="score">0</span>/10
+            <a href="culture.html" class="btn btn-info mr-2">
+                <i class="fas fa-redo"></i> Refaire le quiz
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Retour à l'accueil
+            </a>
         </div>
-        <div id="feedback" class="mb-4"></div>
-        
-        <button class="btn btn-primary mr-2" onclick="showAnswers()">
-            <i class="fas fa-eye"></i> Voir les réponses
-        </button>
-        <a href="sport.html" class="btn btn-info mr-2">
-            <i class="fas fa-redo"></i> Refaire le quiz
-        </a>
-        <a href="index.html" class="btn btn-secondary">
-            <i class="fas fa-home"></i> Retour à l'accueil
-        </a>
     </div>
-</div>
 
-<footer class="text-center">
-    <div class="container">
-        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
-    </div>
-</footer>
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2023 Quiz Interactif. Tous droits réservés.</p>
+        </div>
+    </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
         // Données du quiz
         const quizData = {
-        q1: { answer: "Canberra", explanation: "Canberra est la capitale de l'Australie depuis 1913, choisie comme compromis entre Sydney et Melbourne." },
-        q2: { answer: "Leonardo da Vinci", explanation: "La Joconde (Mona Lisa) a été peinte par le maître italien de la Renaissance, Leonardo da Vinci." },
-        q3: { answer: "Au", explanation: "Le symbole chimique de l'or est Au, qui provient du mot latin 'aurum'." },
-        q4: { answer: "Victor Hugo", explanation: "Victor Hugo est l'auteur du célèbre roman 'Les Misérables', publié en 1862." },
-        q5: { answer: "Océan Pacifique", explanation: "L'océan Pacifique est le plus grand océan du monde, couvrant environ 30% de la surface de la Terre." },
-        q6: { answer: "1789", explanation: "La Déclaration des droits de l'homme et du citoyen a été adoptée le 26 août 1789, pendant la Révolution française." },
-        q7: { answer: "56", explanation: "Le résultat de la multiplication 7 × 8 est 56." },
-        q8: { answer: "Mars", explanation: "Mars est surnommée la 'planète rouge' à cause de la présence d'oxyde de fer à sa surface." },
-        q9: { answer: "Vivaldi", explanation: "Antonio Vivaldi est le compositeur des 'Quatre Saisons', un ensemble de quatre concertos pour violon très célèbres." },
-        q10: { answer: "James Cameron", explanation: "James Cameron a réalisé le film 'Titanic', sorti en 1997 et devenu l'un des plus grands succès du cinéma." }
-    };
+            q1: { answer: "Canberra", explanation: "Canberra est la capitale de l'Australie depuis 1913, choisie comme compromis entre Sydney et Melbourne." },
+            q2: { answer: "Leonardo da Vinci", explanation: "La Joconde (Mona Lisa) a été peinte par le maître italien de la Renaissance, Leonardo da Vinci." },
+            q3: { answer: "Au", explanation: "Le symbole chimique de l'or est Au, qui provient du mot latin 'aurum'." },
+            q4: { answer: "Victor Hugo", explanation: "Victor Hugo est l'auteur du célèbre roman 'Les Misérables', publié en 1862." },
+            q5: { answer: "Océan Pacifique", explanation: "L'océan Pacifique est le plus grand océan du monde, couvrant environ 30% de la surface de la Terre." },
+            q6: { answer: "1789", explanation: "La Déclaration des droits de l'homme et du citoyen a été adoptée le 26 août 1789, pendant la Révolution française." },
+            q7: { answer: "56", explanation: "Le résultat de la multiplication 7 × 8 est 56." },
+            q8: { answer: "Mars", explanation: "Mars est surnommée la 'planète rouge' à cause de la présence d'oxyde de fer à sa surface." },
+            q9: { answer: "Vivaldi", explanation: "Antonio Vivaldi est le compositeur des 'Quatre Saisons', un ensemble de quatre concertos pour violon très célèbres." },
+            q10: { answer: "James Cameron", explanation: "James Cameron a réalisé le film 'Titanic', sorti en 1997 et devenu l'un des plus grands succès du cinéma." }
+        };
 
-    
-    // Variables globales
-    let selectedOptions = {};
-    let timerInterval;
-    let timeLeft = 300; // 5 minutes
-    
-    // Fonction pour initialiser le quiz
-    function initQuiz() {
-        updateProgressBar();
-        startTimer();
-    }
-    
-    // Fonction pour sélectionner une option
-    function selectOption(element, questionId) {
-        // Désélectionner toutes les options pour cette question
-        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-            item.classList.remove('selected');
-        });
-        
-        // Sélectionner l'option cliquée
-        element.classList.add('selected');
-        
-        // Stocker la valeur
-        const value = element.getAttribute('data-value');
-        document.getElementById(`${questionId}-value`).value = value;
-        selectedOptions[questionId] = value;
-        
-        // Mettre à jour la barre de progression
-        updateProgressBar();
-    }
-    
-    // Mettre à jour la barre de progression
-    function updateProgressBar() {
+        // Variables globales
+        let selectedOptions = {};
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes
+        let currentQuestion = 1;
         const totalQuestions = 10;
-        const answeredQuestions = Object.keys(selectedOptions).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
-        document.getElementById('progressBar').style.width = `${progress}%`;
-    }
-    
-    // Fonction pour démarrer le minuteur
-    function startTimer() {
-        const timerElement = document.getElementById('timer');
-        
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            
-            // Formater le temps (minutes:secondes)
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
-            // Changer la couleur quand il reste peu de temps
-            if (timeLeft <= 60) {
-                timerElement.style.color = '#dc3545';
-            }
-            
-            // Si le temps est écoulé
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                submitQuiz();
-            }
-        }, 1000);
-    }
-    
-    // Fonction pour soumettre le quiz
-    function submitQuiz() {
-        clearInterval(timerInterval);
-        
-        // Calculer le score
-        let score = 0;
-        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
-            if (selectedValue === quizData[questionId].answer) {
-                score++;
-            }
+
+        // Fonction pour initialiser le quiz
+        function initQuiz() {
+            updateProgressBar();
+            startTimer();
+            updateNavButtons();
         }
-        
-        // Afficher le score
-        document.getElementById('score').textContent = score;
-        
-        // Afficher le feedback basé sur le score
-        const feedbackElement = document.getElementById('feedback');
-        let feedbackMessage = '';
-        
-        if (score >= 8) {
-            feedbackMessage = '<div class="alert alert-success">Excellent ! </div>';
-        } else if (score >= 5) {
-            feedbackMessage = '<div class="alert alert-info">Bon travail !</div>';
-        } else {
-            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! </div>';
-        }
-        
-        feedbackElement.innerHTML = feedbackMessage;
-        
-        // Afficher les résultats
-        document.getElementById('quizContainer').style.display = 'none';
-        document.getElementById('resultContainer').style.display = 'block';
-    }
-    
-    // Fonction pour afficher les réponses correctes
-    function showAnswers() {
-        document.getElementById('resultContainer').style.display = 'none';
-        document.getElementById('quizContainer').style.display = 'block';
-        
-        // Désactiver tous les éléments cliquables
-        document.querySelectorAll('.option-item').forEach(item => {
-            item.onclick = null;
-            item.style.cursor = 'default';
-        });
-        
-        // Cacher le bouton de soumission
-        document.getElementById('submitBtn').style.display = 'none';
-        
-        // Pour chaque question
-        for (const [questionId, data] of Object.entries(quizData)) {
-            const correctAnswer = data.answer;
-            const selectedValue = selectedOptions[questionId] || '';
-            
-            // Marquer les réponses correctes et incorrectes
+
+        // Fonction pour sélectionner une option
+        function selectOption(element, questionId) {
+            // Désélectionner toutes les options pour cette question
             document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-                const optionValue = item.getAttribute('data-value');
-                
-                if (optionValue === correctAnswer) {
-                    item.classList.add('correct');
-                    // Ajouter l'explication
-                    const explanation = document.createElement('div');
-                    explanation.classList.add('alert', 'alert-success', 'mt-2');
-                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
-                    document.getElementById(questionId).appendChild(explanation);
-                } else if (optionValue === selectedValue) {
-                    item.classList.add('incorrect');
-                }
+                item.classList.remove('selected');
             });
+
+            // Sélectionner l'option cliquée
+            element.classList.add('selected');
+
+            // Stocker la valeur
+            const value = element.textContent;
+            document.getElementById(`${questionId}-value`).value = value;
+            selectedOptions[questionId] = value;
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
         }
-        
-        // Ajouter un bouton pour revenir aux résultats
-        const backButton = document.createElement('button');
-        backButton.classList.add('btn', 'btn-primary', 'mt-4');
-        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
-        backButton.onclick = function() {
+
+        // Fonction pour naviguer entre les questions
+        function navigateQuestion(direction) {
+            // Cacher la question actuelle
+            document.getElementById(`q${currentQuestion}`).classList.remove('active');
+
+            // Calculer la nouvelle question
+            currentQuestion += direction;
+
+            // Afficher la nouvelle question
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+        }
+
+        // Fonction pour mettre à jour les boutons de navigation
+        function updateNavButtons() {
+            // Bouton précédent - désactivé si on est à la première question
+            document.getElementById('prevBtn').disabled = (currentQuestion === 1);
+
+            // Si c'est la dernière question
+            if (currentQuestion === totalQuestions) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+                // Activer le bouton soumettre uniquement si une réponse est sélectionnée
+                document.getElementById('submitBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            } else {
+                // Sinon, afficher le bouton suivant
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+                // Activer le bouton suivant uniquement si une réponse est sélectionnée
+                document.getElementById('nextBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            }
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgressBar() {
+            const progress = (Object.keys(selectedOptions).length / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Fonction pour démarrer le minuteur
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+
+                // Formater le temps (minutes:secondes)
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                // Changer la couleur quand il reste peu de temps
+                if (timeLeft <= 60) {
+                    timerElement.style.color = '#dc3545';
+                }
+
+                // Si le temps est écoulé
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Fonction pour soumettre le quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+
+            // Calculer le score
+            let score = 0;
+            for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+                if (selectedValue === quizData[questionId].answer) {
+                    score++;
+                }
+            }
+
+            // Afficher le score
+            document.getElementById('score').textContent = score;
+
+            // Afficher le feedback basé sur le score
+            const feedbackElement = document.getElementById('feedback');
+            let feedbackMessage = '';
+
+            if (score >= 8) {
+                feedbackMessage = '<div class="alert alert-success">Excellent !</div>';
+            } else if (score >= 5) {
+                feedbackMessage = '<div class="alert alert-info">Bon travail !</div>';
+            } else {
+                feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre !</div>';
+            }
+
+            feedbackElement.innerHTML = feedbackMessage;
+
+            // Afficher les résultats
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('resultContainer').style.display = 'block';
-        };
-        document.getElementById('quizForm').appendChild(backButton);
-    }
-    
-    // Démarrer le quiz au chargement de la page
-    window.onload = initQuiz;
-</script>
+        }
+
+        // Fonction pour afficher les réponses correctes
+        function showAnswers() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+
+            // Afficher toutes les questions
+            document.querySelectorAll('.question').forEach(question => {
+                question.classList.add('active');
+                question.style.marginBottom = '50px'; // Espacement entre les questions
+            });
+
+            // Cacher les boutons de navigation
+            document.querySelector('.navigation-buttons').style.display = 'none';
+
+            // Désactiver tous les éléments cliquables
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.onclick = null;
+                item.style.cursor = 'default';
+            });
+
+            // Pour chaque question
+            for (const [questionId, data] of Object.entries(quizData)) {
+                const correctAnswer = data.answer;
+                const selectedValue = selectedOptions[questionId] || '';
+
+                // Marquer les réponses correctes et incorrectes
+                document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                    const optionValue = item.textContent.trim();
+
+                    if (optionValue === correctAnswer) {
+                        item.classList.add('correct');
+                        // Ajouter l'explication
+                        const explanation = document.createElement('div');
+                        explanation.classList.add('alert', 'alert-success', 'mt-2');
+                        explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                        document.getElementById(questionId).appendChild(explanation);
+                    } else if (optionValue === selectedValue) {
+                        item.classList.add('incorrect');
+                    }
+                });
+            }
+
+            // Ajouter un bouton pour revenir aux résultats
+            const backButton = document.createElement('button');
+            backButton.classList.add('btn', 'btn-primary', 'mt-4');
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+            backButton.onclick = function () {
+                document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+            };
+            document.getElementById('quizForm').appendChild(backButton);
+        }
+
+        // Démarrer le quiz au chargement de la page
+        window.onload = initQuiz;
+    </script>
 </body>
+
 </html>

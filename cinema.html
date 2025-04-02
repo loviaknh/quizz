@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz sur les Sports</title>
+    <title>Quiz sur le Cinéma</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -13,46 +14,58 @@
             font-family: 'Roboto', sans-serif;
             padding-bottom: 60px;
         }
-        
+
         header {
             background-color: black;
             color: white;
             padding: 20px 0;
             margin-bottom: 30px;
         }
-        
+
         .quiz-container {
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
             animation: fadeIn 0.5s ease;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .question {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
+            display: none; /* Hide all questions by default */
         }
-        
+
+        .question.active {
+            display: block; /* Show only the active question */
+        }
+
         .question p {
             font-size: 1.2rem;
             font-weight: 600;
             color: #333;
             margin-bottom: 15px;
         }
-        
+
         .options {
             list-style-type: none;
             padding-left: 0;
         }
-        
+
         .option-item {
             padding: 10px 15px;
             margin-bottom: 10px;
@@ -61,60 +74,67 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .option-item:hover {
             background-color: #f1f1f1;
         }
-        
+
         .option-item.selected {
             background-color: #007bff;
             color: white;
             border-color: #007bff;
         }
-        
+
         .option-item.correct {
             background-color: #28a745;
             color: white;
             border-color: #28a745;
         }
-        
+
         .option-item.incorrect {
             background-color: #dc3545;
             color: white;
             border-color: #dc3545;
         }
-        
-        .submit-btn {
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
+        }
+
+        .prev-btn,
+        .next-btn,
+        .submit-btn {
             padding: 10px 30px;
             font-size: 1.1rem;
         }
-        
+
         .result-container {
             display: none;
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             margin-top: 30px;
         }
-        
+
         .score-display {
             font-size: 2rem;
             font-weight: bold;
             margin: 20px 0;
         }
-        
+
         .progress-container {
             margin: 20px 0;
         }
-        
+
         .timer-container {
             position: fixed;
             top: 100px;
             right: 20px;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 15px;
             border-radius: 50%;
@@ -126,7 +146,7 @@
             font-size: 1.5rem;
             z-index: 1000;
         }
-        
+
         footer {
             background-color: black;
             color: white;
@@ -135,14 +155,14 @@
             bottom: 0;
             width: 100%;
         }
-        
+
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .difficulty-badge {
             background-color: #007bff;
             color: white;
@@ -150,18 +170,26 @@
             border-radius: 20px;
             font-size: 0.9rem;
         }
-        
+
         /* Animation pour les réponses */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .pulse {
             animation: pulse 0.5s;
         }
-        
+
         /* Style pour les boutons de navigation */
         .nav-button {
             background-color: #343a40;
@@ -172,12 +200,12 @@
             margin: 0 5px;
             transition: all 0.3s;
         }
-        
+
         .nav-button:hover {
             background-color: #212529;
             transform: translateY(-2px);
         }
-        
+
         /* Badge du niveau de progression */
         .progress-badge {
             background-color: #17a2b8;
@@ -188,362 +216,350 @@
             margin-bottom: 10px;
             display: inline-block;
         }
+
+        /* Style spécifique pour les boutons de navigation */
+        .prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
     </style>
     <!-- Fin de syle pour la page cinema -->
 </head>
+<!-- Coder, c'est comme écrire de la poésie. -->
 <body>
 
-<header class="text-center">
-    <div class="container">
-        <h1><i class="fas fa-film"></i> Quiz sur le Cinéma</h1>
-        <p class="lead">Testez vos connaissances sur le 7ème art</p>
-        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
-    </div>
-</header>
+    <header class="text-center">
+        <div class="container">
+            <h1><i class="fas fa-film"></i> Quiz sur le Cinéma</h1>
+            <p class="lead">Testez vos connaissances sur le 7ème art</p>
+            <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+        </div>
+    </header>
 
-<div class="container">
-    <div class="progress-container">
-        <div class="progress">
-            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                    role="progressbar" style="width: 0%"></div>
+            </div>
         </div>
-    </div>
-    
-    <div id="timerContainer" class="timer-container">
-        <span id="timer">300</span>
-    </div>
-    
-    <div id="quizContainer" class="quiz-container">
-        <div class="quiz-header">
-            <h2>Questions sur le Cinéma</h2>
-            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+
+        <div id="timerContainer" class="timer-container">
+            <span id="timer">5:00</span>
         </div>
-        
-        <form id="quizForm">
-            <!-- Question 1 -->
-            <div class="question" id="q1">
-                <span class="progress-badge">Question 1/10</span>
-                <p><i class="fas fa-film"></i> Qui a réalisé le film "Pulp Fiction" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Martin Scorsese" onclick="selectOption(this, 'q1')">Martin Scorsese</li>
-                    <li class="option-item" data-value="Quentin Tarantino" onclick="selectOption(this, 'q1')">Quentin Tarantino</li>
-                    <li class="option-item" data-value="Steven Spielberg" onclick="selectOption(this, 'q1')">Steven Spielberg</li>
-                    <li class="option-item" data-value="Christopher Nolan" onclick="selectOption(this, 'q1')">Christopher Nolan</li>
-                </ul>
-                <input type="hidden" name="q1" id="q1-value">
+
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h2>Questions sur le Cinéma</h2>
+                <span class="difficulty-badge">Niveau: Intermédiaire</span>
             </div>
-            
-            <!-- Question 2 -->
-            <div class="question" id="q2">
-                <span class="progress-badge">Question 2/10</span>
-                <p><i class="fas fa-trophy"></i> Quel film a remporté l'Oscar du meilleur film en 2020 ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="1917" onclick="selectOption(this, 'q2')">1917</li>
-                    <li class="option-item" data-value="Parasite" onclick="selectOption(this, 'q2')">Parasite</li>
-                    <li class="option-item" data-value="Joker" onclick="selectOption(this, 'q2')">Joker</li>
-                    <li class="option-item" data-value="Once Upon a Time in Hollywood" onclick="selectOption(this, 'q2')">Once Upon a Time in Hollywood</li>
-                </ul>
-                <input type="hidden" name="q2" id="q2-value">
+
+            <form id="quizForm">
+                <!-- Questions will be added here -->
+                <div class="navigation-buttons">
+                    <button type="button" id="prevBtn" class="btn prev-btn" onclick="navigateQuestion(-1)" disabled>
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button type="button" id="nextBtn" class="btn next-btn" onclick="navigateQuestion(1)" disabled>
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="button" id="submitBtn" class="btn submit-btn" style="display: none;"
+                        onclick="submitQuiz()">
+                        <i class="fas fa-check-circle"></i> Terminer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+            <div class="score-display">
+                <span id="score">0</span>/10
             </div>
-            
-            <!-- Question 3 -->
-            <div class="question" id="q3">
-                <span class="progress-badge">Question 3/10</span>
-                <p><i class="fas fa-mask"></i> Qui a joué le rôle du Joker dans "The Dark Knight" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Joaquin Phoenix" onclick="selectOption(this, 'q3')">Joaquin Phoenix</li>
-                    <li class="option-item" data-value="Jack Nicholson" onclick="selectOption(this, 'q3')">Jack Nicholson</li>
-                    <li class="option-item" data-value="Heath Ledger" onclick="selectOption(this, 'q3')">Heath Ledger</li>
-                    <li class="option-item" data-value="Jared Leto" onclick="selectOption(this, 'q3')">Jared Leto</li>
-                </ul>
-                <input type="hidden" name="q3" id="q3-value">
-            </div>
-            
-            <!-- Question 4 -->
-            <div class="question" id="q4">
-                <span class="progress-badge">Question 4/10</span>
-                <p><i class="fas fa-jedi"></i> Dans quel film entend-on la réplique "Je suis ton père" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Star Wars: Un nouvel espoir" onclick="selectOption(this, 'q4')">Star Wars: Un nouvel espoir</li>
-                    <li class="option-item" data-value="Star Wars: L'Empire contre-attaque" onclick="selectOption(this, 'q4')">Star Wars: L'Empire contre-attaque</li>
-                    <li class="option-item" data-value="Star Wars: Le Retour du Jedi" onclick="selectOption(this, 'q4')">Star Wars: Le Retour du Jedi</li>
-                    <li class="option-item" data-value="Star Wars: La Revanche des Sith" onclick="selectOption(this, 'q4')">Star Wars: La Revanche des Sith</li>
-                </ul>
-                <input type="hidden" name="q4" id="q4-value">
-            </div>
-            
-            <!-- Question 5 -->
-            <div class="question" id="q5">
-                <span class="progress-badge">Question 5/10</span>
-                <p><i class="fas fa-ship"></i> Quel est le film le plus rentable de tous les temps (sans ajustement de l'inflation) ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Avatar" onclick="selectOption(this, 'q5')">Avatar</li>
-                    <li class="option-item" data-value="Titanic" onclick="selectOption(this, 'q5')">Titanic</li>
-                    <li class="option-item" data-value="Star Wars: Le Réveil de la Force" onclick="selectOption(this, 'q5')">Star Wars: Le Réveil de la Force</li>
-                    <li class="option-item" data-value="Avengers: Endgame" onclick="selectOption(this, 'q5')">Avengers: Endgame</li>
-                </ul>
-                <input type="hidden" name="q5" id="q5-value">
-            </div>
-            
-            <!-- Question 6 -->
-            <div class="question" id="q6">
-                <span class="progress-badge">Question 6/10</span>
-                <p><i class="fas fa-magic"></i> Quelle actrice joue Hermione Granger dans la saga Harry Potter ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Emma Watson" onclick="selectOption(this, 'q6')">Emma Watson</li>
-                    <li class="option-item" data-value="Emma Stone" onclick="selectOption(this, 'q6')">Emma Stone</li>
-                    <li class="option-item" data-value="Jennifer Lawrence" onclick="selectOption(this, 'q6')">Jennifer Lawrence</li>
-                    <li class="option-item" data-value="Bonnie Wright" onclick="selectOption(this, 'q6')">Bonnie Wright</li>
-                </ul>
-                <input type="hidden" name="q6" id="q6-value">
-            </div>
-            
-            <!-- Question 7 -->
-            <div class="question" id="q7">
-                <span class="progress-badge">Question 7/10</span>
-                <p><i class="fas fa-drafting-compass"></i> Qui a réalisé "Inception" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="James Cameron" onclick="selectOption(this, 'q7')">James Cameron</li>
-                    <li class="option-item" data-value="Christopher Nolan" onclick="selectOption(this, 'q7')">Christopher Nolan</li>
-                    <li class="option-item" data-value="Denis Villeneuve" onclick="selectOption(this, 'q7')">Denis Villeneuve</li>
-                    <li class="option-item" data-value="Ridley Scott" onclick="selectOption(this, 'q7')">Ridley Scott</li>
-                </ul>
-                <input type="hidden" name="q7" id="q7-value">
-            </div>
-            
-            <!-- Question 8 -->
-            <div class="question" id="q8">
-                <span class="progress-badge">Question 8/10</span>
-                <p><i class="fas fa-car-side"></i> Quelle saga de films met en scène les personnages de Dominic Toretto et Brian O'Conner ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Mission Impossible" onclick="selectOption(this, 'q8')">Mission Impossible</li>
-                    <li class="option-item" data-value="Fast & Furious" onclick="selectOption(this, 'q8')">Fast & Furious</li>
-                    <li class="option-item" data-value="Jason Bourne" onclick="selectOption(this, 'q8')">Jason Bourne</li>
-                    <li class="option-item" data-value="John Wick" onclick="selectOption(this, 'q8')">John Wick</li>
-                </ul>
-                <input type="hidden" name="q8" id="q8-value">
-            </div>
-            
-            <!-- Question 9 -->
-            <div class="question" id="q9">
-                <span class="progress-badge">Question 9/10</span>
-                <p><i class="fas fa-user-secret"></i> Quel acteur a incarné James Bond le plus longtemps ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Sean Connery" onclick="selectOption(this, 'q9')">Sean Connery</li>
-                    <li class="option-item" data-value="Roger Moore" onclick="selectOption(this, 'q9')">Roger Moore</li>
-                    <li class="option-item" data-value="Pierce Brosnan" onclick="selectOption(this, 'q9')">Pierce Brosnan</li>
-                    <li class="option-item" data-value="Daniel Craig" onclick="selectOption(this, 'q9')">Daniel Craig</li>
-                </ul>
-                <input type="hidden" name="q9" id="q9-value">
-            </div>
-            
-            <!-- Question 10 -->
-            <div class="question" id="q10">
-                <span class="progress-badge">Question 10/10</span>
-                <p><i class="fas fa-palette"></i> Quel est le premier film d'animation de Pixar ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Monstres & Cie" onclick="selectOption(this, 'q10')">Monstres & Cie</li>
-                    <li class="option-item" data-value="Le Monde de Nemo" onclick="selectOption(this, 'q10')">Le Monde de Nemo</li>
-                    <li class="option-item" data-value="Toy Story" onclick="selectOption(this, 'q10')">Toy Story</li>
-                    <li class="option-item" data-value="1001 pattes" onclick="selectOption(this, 'q10')">1001 pattes</li>
-                </ul>
-                <input type="hidden" name="q10" id="q10-value">
-            </div>
-            
-            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
-                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            <div id="feedback" class="mb-4"></div>
+
+            <button class="btn btn-primary mr-2" onclick="showAnswers()">
+                <i class="fas fa-eye"></i> Voir les réponses
             </button>
-        </form>
-    </div>
-    
-    
-    <div id="resultContainer" class="result-container">
-        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
-        <div class="score-display">
-            <span id="score">0</span>/10
+            <a href="cinema.html" class="btn btn-info mr-2">
+                <i class="fas fa-redo"></i> Refaire le quiz
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Retour à l'accueil
+            </a>
         </div>
-        <div id="feedback" class="mb-4"></div>
-        
-        <button class="btn btn-primary mr-2" onclick="showAnswers()">
-            <i class="fas fa-eye"></i> Voir les réponses
-        </button>
-        <a href="cinema.html" class="btn btn-info mr-2">
-            <i class="fas fa-redo"></i> Refaire le quiz
-        </a>
-        <a href="index.html" class="btn btn-secondary">
-            <i class="fas fa-home"></i> Retour à l'accueil
-        </a>
     </div>
-</div>
 
-<footer class="text-center">
-    <div class="container">
-        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
-    </div>
-</footer>
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+        </div>
+    </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Données du quiz
-    const quizData = {
-    q1: { answer: "Quentin Tarantino", explanation: "Pulp Fiction est un film culte réalisé par Quentin Tarantino en 1994, qui a remporté la Palme d'Or au Festival de Cannes." },
-    q2: { answer: "Parasite", explanation: "Parasite, réalisé par Bong Joon-ho, a remporté l'Oscar du meilleur film en 2020, devenant le premier film non anglophone à recevoir cette récompense." },
-    q3: { answer: "Heath Ledger", explanation: "Heath Ledger a livré une performance légendaire dans le rôle du Joker, qui lui a valu un Oscar posthume du meilleur acteur dans un second rôle en 2009." },
-    q4: { answer: "Star Wars: L'Empire contre-attaque", explanation: "La célèbre réplique 'Je suis ton père' (ou plutôt 'Non, je suis ton père') est prononcée par Dark Vador dans L'Empire contre-attaque (1980)." },
-    q5: { answer: "Avatar", explanation: "Avatar de James Cameron est redevenu le film le plus rentable de l'histoire après sa ressortie, dépassant Avengers: Endgame, avec plus de 2,9 milliards de dollars de recettes mondiales." },
-    q6: { answer: "Emma Watson", explanation: "Emma Watson a joué le rôle d'Hermione Granger dans les huit films de la saga Harry Potter, de 2001 à 2011." },
-    q7: { answer: "Christopher Nolan", explanation: "Inception est un film de science-fiction réalisé par Christopher Nolan, sorti en 2010, avec Leonardo DiCaprio dans le rôle principal." },
-    q8: { answer: "Fast & Furious", explanation: "Dominic Toretto (Vin Diesel) et Brian O'Conner (Paul Walker) sont les personnages principaux de la saga Fast & Furious, dont le premier film est sorti en 2001." },
-    q9: { answer: "Roger Moore", explanation: "Roger Moore a joué James Bond dans sept films officiels de la franchise, de 1973 à 1985, ce qui en fait l'acteur ayant incarné 007 le plus longtemps." },
-    q10: { answer: "Toy Story", explanation: "Toy Story, sorti en 1995, est le premier long-métrage entièrement réalisé en images de synthèse et le premier film de Pixar Animation Studios." }
-};
-    
-    // Variables globales
-    let selectedOptions = {};
-    let timerInterval;
-    let timeLeft = 300; // 5 minutes
-    
-    // Fonction pour initialiser le quiz
-    function initQuiz() {
-        updateProgressBar();
-        startTimer();
-    }
-    
-    // Fonction pour sélectionner une option
-    function selectOption(element, questionId) {
-        // Désélectionner toutes les options pour cette question
-        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-            item.classList.remove('selected');
-        });
-        
-        // Sélectionner l'option cliquée
-        element.classList.add('selected');
-        
-        // Stocker la valeur
-        const value = element.getAttribute('data-value');
-        document.getElementById(`${questionId}-value`).value = value;
-        selectedOptions[questionId] = value;
-        
-        // Mettre à jour la barre de progression
-        updateProgressBar();
-    }
-    
-    // Mettre à jour la barre de progression
-    function updateProgressBar() {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Données du quiz
+        const quizData = {
+            q1: { answer: "Quentin Tarantino", explanation: "Pulp Fiction est un film culte réalisé par Quentin Tarantino en 1994, qui a remporté la Palme d'Or au Festival de Cannes." },
+            q2: { answer: "Parasite", explanation: "Parasite, réalisé par Bong Joon-ho, a remporté l'Oscar du meilleur film en 2020, devenant le premier film non anglophone à recevoir cette récompense." },
+            q3: { answer: "Heath Ledger", explanation: "Heath Ledger a livré une performance légendaire dans le rôle du Joker, qui lui a valu un Oscar posthume du meilleur acteur dans un second rôle en 2009." },
+            q4: { answer: "Star Wars: L'Empire contre-attaque", explanation: "La célèbre réplique 'Je suis ton père' (ou plutôt 'Non, je suis ton père') est prononcée par Dark Vador dans L'Empire contre-attaque (1980)." },
+            q5: { answer: "Avengers: Endgame", explanation: "Avengers: Endgame est le film le plus rentable de l'histoire du cinéma, avec plus de 2,79 milliards de dollars de recettes mondiales." },
+            q6: { answer: "Emma Watson", explanation: "Emma Watson a joué le rôle d'Hermione Granger dans les huit films de la saga Harry Potter, de 2001 à 2011." },
+            q7: { answer: "Christopher Nolan", explanation: "Inception est un film de science-fiction réalisé par Christopher Nolan, sorti en 2010, avec Leonardo DiCaprio dans le rôle principal." },
+            q8: { answer: "Fast & Furious", explanation: "Dominic Toretto (Vin Diesel) et Brian O'Conner (Paul Walker) sont les personnages principaux de la saga Fast & Furious, dont le premier film est sorti en 2001." },
+            q9: { answer: "Roger Moore", explanation: "Roger Moore a joué James Bond dans sept films officiels de la franchise, de 1973 à 1985, ce qui en fait l'acteur ayant incarné 007 le plus longtemps." },
+            q10: { answer: "Toy Story", explanation: "Toy Story, sorti en 1995, est le premier long-métrage entièrement réalisé en images de synthèse et le premier film de Pixar Animation Studios." }
+        };
+
+        // Variables globales
+        let selectedOptions = {};
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes
+        let currentQuestion = 1;
         const totalQuestions = 10;
-        const answeredQuestions = Object.keys(selectedOptions).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
-        document.getElementById('progressBar').style.width = `${progress}%`;
-    }
-    
-    // Fonction pour démarrer le minuteur
-    function startTimer() {
-        const timerElement = document.getElementById('timer');
-        
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            
-            // Formater le temps (minutes:secondes)
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
-            // Changer la couleur quand il reste peu de temps
-            if (timeLeft <= 60) {
-                timerElement.style.color = '#dc3545';
-            }
-            
-            // Si le temps est écoulé
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                submitQuiz();
-            }
-        }, 1000);
-    }
-    
-    // Fonction pour soumettre le quiz
-    function submitQuiz() {
-        clearInterval(timerInterval);
-        
-        // Calculer le score
-        let score = 0;
-        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
-            if (selectedValue === quizData[questionId].answer) {
-                score++;
-            }
+
+        // Fonction pour initialiser le quiz
+        function initQuiz() {
+            updateProgressBar();
+            startTimer();
+            updateNavButtons();
+            loadQuestions();
         }
-        
-        // Afficher le score
-        document.getElementById('score').textContent = score;
-        
-        // Afficher le feedback basé sur le score
-        const feedbackElement = document.getElementById('feedback');
-        let feedbackMessage = '';
-        
-        if (score >= 8) {
-            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable cinéphile !</div>';
-        } else if (score >= 5) {
-            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances cinématographique.</div>';
-       
-        }
-        
-        feedbackElement.innerHTML = feedbackMessage;
-        
-        // Afficher les résultats
-        document.getElementById('quizContainer').style.display = 'none';
-        document.getElementById('resultContainer').style.display = 'block';
-    }
-    
-    // Fonction pour afficher les réponses correctes
-    function showAnswers() {
-        document.getElementById('resultContainer').style.display = 'none';
-        document.getElementById('quizContainer').style.display = 'block';
-        
-        // Désactiver tous les éléments cliquables
-        document.querySelectorAll('.option-item').forEach(item => {
-            item.onclick = null;
-            item.style.cursor = 'default';
-        });
-        
-        // Cacher le bouton de soumission
-        document.getElementById('submitBtn').style.display = 'none';
-        
-        // Pour chaque question
-        for (const [questionId, data] of Object.entries(quizData)) {
-            const correctAnswer = data.answer;
-            const selectedValue = selectedOptions[questionId] || '';
-            
-            // Marquer les réponses correctes et incorrectes
-            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-                const optionValue = item.getAttribute('data-value');
-                
-                if (optionValue === correctAnswer) {
-                    item.classList.add('correct');
-                    // Ajouter l'explication
-                    const explanation = document.createElement('div');
-                    explanation.classList.add('alert', 'alert-success', 'mt-2');
-                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
-                    document.getElementById(questionId).appendChild(explanation);
-                } else if (optionValue === selectedValue) {
-                    item.classList.add('incorrect');
+
+        // Fonction pour charger les questions
+        function loadQuestions() {
+            const quizForm = document.getElementById('quizForm');
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionData = quizData[`q${i}`];
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.id = `q${i}`;
+                if (i === 1) {
+                    questionDiv.classList.add('active');
                 }
-            });
+                questionDiv.innerHTML = `
+                    <span class="progress-badge">Question ${i}/${totalQuestions}</span>
+                    <p><i class="fas fa-film"></i> ${questionData.explanation}</p>
+                    <ul class="options">
+                        ${generateOptions(i)}
+                    </ul>
+                    <input type="hidden" name="q${i}" id="q${i}-value">
+                `;
+                quizForm.insertBefore(questionDiv, document.querySelector('.navigation-buttons'));
+            }
         }
-        
-        // Ajouter un bouton pour revenir aux résultats
-        const backButton = document.createElement('button');
-        backButton.classList.add('btn', 'btn-primary', 'mt-4');
-        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
-        backButton.onclick = function() {
+
+        // Fonction pour générer les options
+        function generateOptions(questionNumber) {
+            const options = {
+                q1: ["Martin Scorsese", "Quentin Tarantino", "Steven Spielberg", "Christopher Nolan"],
+                q2: ["1917", "Parasite", "Joker", "Once Upon a Time in Hollywood"],
+                q3: ["Joaquin Phoenix", "Jack Nicholson", "Heath Ledger", "Jared Leto"],
+                q4: ["Star Wars: Un nouvel espoir", "Star Wars: L'Empire contre-attaque", "Star Wars: Le Retour du Jedi", "Star Wars: La Revanche des Sith"],
+                q5: ["Avatar", "Titanic", "Star Wars: Le Réveil de la Force", "Avengers: Endgame"],
+                q6: ["Emma Watson", "Emma Stone", "Jennifer Lawrence", "Bonnie Wright"],
+                q7: ["James Cameron", "Christopher Nolan", "Denis Villeneuve", "Ridley Scott"],
+                q8: ["Mission Impossible", "Fast & Furious", "Jason Bourne", "John Wick"],
+                q9: ["Sean Connery", "Roger Moore", "Pierce Brosnan", "Daniel Craig"],
+                q10: ["Monstres & Cie", "Le Monde de Nemo", "Toy Story", "1001 pattes"]
+            };
+            return options[`q${questionNumber}`].map(option => `<li class="option-item" data-value="${option}" onclick="selectOption(this, 'q${questionNumber}')">${option}</li>`).join('');
+        }
+
+        // Fonction pour sélectionner une option
+        function selectOption(element, questionId) {
+            // Désélectionner toutes les options pour cette question
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Sélectionner l'option cliquée
+            element.classList.add('selected');
+
+            // Stocker la valeur
+            const value = element.getAttribute('data-value');
+            document.getElementById(`${questionId}-value`).value = value;
+            selectedOptions[questionId] = value;
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+        }
+
+        // Fonction pour naviguer entre les questions
+        function navigateQuestion(direction) {
+            // Cacher la question actuelle
+            document.getElementById(`q${currentQuestion}`).classList.remove('active');
+
+            // Calculer la nouvelle question
+            currentQuestion += direction;
+
+            // Afficher la nouvelle question
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+        }
+
+        // Fonction pour mettre à jour les boutons de navigation
+        function updateNavButtons() {
+            // Bouton précédent - désactivé si on est à la première question
+            document.getElementById('prevBtn').disabled = (currentQuestion === 1);
+
+            // Si c'est la dernière question
+            if (currentQuestion === totalQuestions) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+                // Activer le bouton soumettre uniquement si une réponse est sélectionnée
+                document.getElementById('submitBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            } else {
+                // Sinon, afficher le bouton suivant
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+                // Activer le bouton suivant uniquement si une réponse est sélectionnée
+                document.getElementById('nextBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            }
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgressBar() {
+            const progress = (Object.keys(selectedOptions).length / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Fonction pour démarrer le minuteur
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+
+                // Formater le temps (minutes:secondes)
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                // Changer la couleur quand il reste peu de temps
+                if (timeLeft <= 60) {
+                    timerElement.style.color = '#dc3545';
+                }
+
+                // Si le temps est écoulé
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Fonction pour soumettre le quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+
+            // Calculer le score
+            let score = 0;
+            for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+                if (selectedValue === quizData[questionId].answer) {
+                    score++;
+                }
+            }
+
+            // Afficher le score
+            document.getElementById('score').textContent = score;
+
+            // Afficher le feedback basé sur le score
+            const feedbackElement = document.getElementById('feedback');
+            let feedbackMessage = '';
+
+            if (score >= 8) {
+                feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable cinéphile !</div>';
+            } else if (score >= 5) {
+                feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances cinématographique.</div>';
+            } else {
+                feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Le monde du cinéma est vaste et passionnant.</div>';
+            }
+
+            feedbackElement.innerHTML = feedbackMessage;
+
+            // Afficher les résultats
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('resultContainer').style.display = 'block';
-        };
-        document.getElementById('quizForm').appendChild(backButton);
-    }
-    
-    // Démarrer le quiz au chargement de la page
-    window.onload = initQuiz;
-</script>
+        }
+
+        // Fonction pour afficher les réponses correctes
+        function showAnswers() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+
+            // Afficher toutes les questions
+            document.querySelectorAll('.question').forEach(question => {
+                question.classList.add('active');
+                question.style.marginBottom = '50px'; // Espacement entre les questions
+            });
+
+            // Cacher les boutons de navigation
+            document.querySelector('.navigation-buttons').style.display = 'none';
+
+            // Désactiver tous les éléments cliquables
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.onclick = null;
+                item.style.cursor = 'default';
+            });
+
+            // Pour chaque question
+            for (const [questionId, data] of Object.entries(quizData)) {
+                const correctAnswer = data.answer;
+                const selectedValue = selectedOptions[questionId] || '';
+
+                // Marquer les réponses correctes et incorrectes
+                document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                    const optionValue = item.getAttribute('data-value');
+
+                    if (optionValue === correctAnswer) {
+                        item.classList.add('correct');
+                        // Ajouter l'explication
+                        const explanation = document.createElement('div');
+                        explanation.classList.add('alert', 'alert-success', 'mt-2');
+                        explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                        document.getElementById(questionId).appendChild(explanation);
+                    } else if (optionValue === selectedValue) {
+                        item.classList.add('incorrect');
+                    }
+                });
+            }
+
+            // Ajouter un bouton pour revenir aux résultats
+            const backButton = document.createElement('button');
+            backButton.classList.add('btn', 'btn-primary', 'mt-4');
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+            backButton.onclick = function () {
+                document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+            };
+            document.getElementById('quizForm').appendChild(backButton);
+        }
+
+        // Démarrer le quiz au chargement de la page
+        window.onload = initQuiz;
+    </script>
 </body>
+
 </html>

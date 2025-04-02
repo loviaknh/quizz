@@ -1,58 +1,71 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz sur les Sports</title>
+    <title>Quiz sur la Géographie</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Debut style de geographie */
+        /* Style pour la page geographie */
         body {
-            background-color: #f8d7da;
+            background-color: #d7f8e3;
             font-family: 'Roboto', sans-serif;
             padding-bottom: 60px;
         }
-        
+
         header {
-            background-color: black;
+            background-color: #2e7d32;
             color: white;
             padding: 20px 0;
             margin-bottom: 30px;
         }
-        
+
         .quiz-container {
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
             animation: fadeIn 0.5s ease;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .question {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
+            display: none; /* Hide all questions by default */
         }
-        
+
+        .question.active {
+            display: block; /* Show only the active question */
+        }
+
         .question p {
             font-size: 1.2rem;
             font-weight: 600;
             color: #333;
             margin-bottom: 15px;
         }
-        
+
         .options {
             list-style-type: none;
             padding-left: 0;
         }
-        
+
         .option-item {
             padding: 10px 15px;
             margin-bottom: 10px;
@@ -61,60 +74,67 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .option-item:hover {
             background-color: #f1f1f1;
         }
-        
+
         .option-item.selected {
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: white;
-            border-color: #007bff;
+            border-color: #4CAF50;
         }
-        
+
         .option-item.correct {
             background-color: #28a745;
             color: white;
             border-color: #28a745;
         }
-        
+
         .option-item.incorrect {
             background-color: #dc3545;
             color: white;
             border-color: #dc3545;
         }
-        
-        .submit-btn {
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
+        }
+
+        .prev-btn,
+        .next-btn,
+        .submit-btn {
             padding: 10px 30px;
             font-size: 1.1rem;
         }
-        
+
         .result-container {
             display: none;
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             margin-top: 30px;
         }
-        
+
         .score-display {
             font-size: 2rem;
             font-weight: bold;
             margin: 20px 0;
         }
-        
+
         .progress-container {
             margin: 20px 0;
         }
-        
+
         .timer-container {
             position: fixed;
             top: 100px;
             right: 20px;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(46, 125, 50, 0.8);
             color: white;
             padding: 15px;
             border-radius: 50%;
@@ -126,42 +146,50 @@
             font-size: 1.5rem;
             z-index: 1000;
         }
-        
+
         footer {
-            background-color: black;
+            background-color: #2e7d32;
             color: white;
             padding: 15px 0;
             position: fixed;
             bottom: 0;
             width: 100%;
         }
-        
+
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .difficulty-badge {
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.9rem;
         }
-        
+
         /* Animation pour les réponses */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .pulse {
             animation: pulse 0.5s;
         }
-        
+
         /* Style pour les boutons de navigation */
         .nav-button {
             background-color: #343a40;
@@ -172,21 +200,37 @@
             margin: 0 5px;
             transition: all 0.3s;
         }
-        
+
         .nav-button:hover {
             background-color: #212529;
             transform: translateY(-2px);
         }
-        
+
         /* Badge du niveau de progression */
         .progress-badge {
-            background-color: #17a2b8;
+            background-color: #388e3c;
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.9rem;
             margin-bottom: 10px;
             display: inline-block;
+        }
+
+        /* Style spécifique pour les boutons de navigation */
+        .prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
         }
     </style>
     <!-- Fin de syle pour la page geographie -->
@@ -202,348 +246,320 @@
         </div>
     </header>
 
-<div class="container">
-    <div class="progress-container">
-        <div class="progress">
-            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
-        </div>
-    </div>
-    
-    <div id="timerContainer" class="timer-container">
-        <span id="timer">300</span>
-    </div>
-    
-    <div id="quizContainer" class="quiz-container">
-        <div class="quiz-header">
-            <h2>Questions sur la Géographie</h2>
-            <span class="difficulty-badge">Niveau: Intermédiaire</span>
-        </div>
-        
-        <form id="quizForm">
-            <!-- Question 1 -->
-            <div class="question" id="q1">
-                <span class="progress-badge">Question 1/10</span>
-                <p><i class="fas fa-mountain"></i> Quel est le plus haut sommet du monde ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Mont Everest" onclick="selectOption(this, 'q1')">Mont Everest</li>
-                    <li class="option-item" data-value="K2" onclick="selectOption(this, 'q1')">K2</li>
-                    <li class="option-item" data-value="Mont Blanc" onclick="selectOption(this, 'q1')">Mont Blanc</li>
-                    <li class="option-item" data-value="Kilimandjaro" onclick="selectOption(this, 'q1')">Kilimandjaro</li>
-                </ul>
-                <input type="hidden" name="q1" id="q1-value">
-            </div>
-            
-            <!-- Question 2 -->
-            <div class="question" id="q2">
-                <span class="progress-badge">Question 2/10</span>
-                <p><i class="fas fa-water"></i> Quel est le plus long fleuve du monde ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Nil" onclick="selectOption(this, 'q2')">Nil</li>
-                    <li class="option-item" data-value="Amazone" onclick="selectOption(this, 'q2')">Amazone</li>
-                    <li class="option-item" data-value="Mississippi" onclick="selectOption(this, 'q2')">Mississippi</li>
-                    <li class="option-item" data-value="Yangtsé" onclick="selectOption(this, 'q2')">Yangtsé</li>
-                </ul>
-                <input type="hidden" name="q2" id="q2-value">
-            </div>
-            
-            <!-- Question 3 -->
-            <div class="question" id="q3">
-                <span class="progress-badge">Question 3/10</span>
-                <p><i class="fas fa-flag"></i> Quelle est la capitale de l'Australie ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Sydney" onclick="selectOption(this, 'q3')">Sydney</li>
-                    <li class="option-item" data-value="Melbourne" onclick="selectOption(this, 'q3')">Melbourne</li>
-                    <li class="option-item" data-value="Canberra" onclick="selectOption(this, 'q3')">Canberra</li>
-                    <li class="option-item" data-value="Brisbane" onclick="selectOption(this, 'q3')">Brisbane</li>
-                </ul>
-                <input type="hidden" name="q3" id="q3-value">
-            </div>
-            
-            <!-- Question 4 -->
-            <div class="question" id="q4">
-                <span class="progress-badge">Question 4/10</span>
-                <p><i class="fas fa-globe-americas"></i> Quel pays possède la plus grande superficie au monde ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Canada" onclick="selectOption(this, 'q4')">Canada</li>
-                    <li class="option-item" data-value="Chine" onclick="selectOption(this, 'q4')">Chine</li>
-                    <li class="option-item" data-value="États-Unis" onclick="selectOption(this, 'q4')">États-Unis</li>
-                    <li class="option-item" data-value="Russie" onclick="selectOption(this, 'q4')">Russie</li>
-                </ul>
-                <input type="hidden" name="q4" id="q4-value">
-            </div>
-            
-            <!-- Question 5 -->
-            <div class="question" id="q5">
-                <span class="progress-badge">Question 5/10</span>
-                <p><i class="fas fa-landmark"></i> Dans quel pays se trouve la Grande Barrière de Corail ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Indonésie" onclick="selectOption(this, 'q5')">Indonésie</li>
-                    <li class="option-item" data-value="Australie" onclick="selectOption(this, 'q5')">Australie</li>
-                    <li class="option-item" data-value="Philippines" onclick="selectOption(this, 'q5')">Philippines</li>
-                    <li class="option-item" data-value="Mexique" onclick="selectOption(this, 'q5')">Mexique</li>
-                </ul>
-                <input type="hidden" name="q5" id="q5-value">
-            </div>
-            
-            <!-- Question 6 -->
-            <div class="question" id="q6">
-                <span class="progress-badge">Question 6/10</span>
-                <p><i class="fas fa-map-marked-alt"></i> Quel est le plus petit pays du monde en termes de superficie ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Monaco" onclick="selectOption(this, 'q6')">Monaco</li>
-                    <li class="option-item" data-value="Vatican" onclick="selectOption(this, 'q6')">Vatican</li>
-                    <li class="option-item" data-value="Saint-Marin" onclick="selectOption(this, 'q6')">Saint-Marin</li>
-                    <li class="option-item" data-value="Nauru" onclick="selectOption(this, 'q6')">Nauru</li>
-                </ul>
-                <input type="hidden" name="q6" id="q6-value">
-            </div>
-            
-            <!-- Question 7 -->
-            <div class="question" id="q7">
-                <span class="progress-badge">Question 7/10</span>
-                <p><i class="fas fa-desert"></i> Quel est le plus grand désert du monde ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Sahara" onclick="selectOption(this, 'q7')">Sahara</li>
-                    <li class="option-item" data-value="Gobi" onclick="selectOption(this, 'q7')">Gobi</li>
-                    <li class="option-item" data-value="Antarctique" onclick="selectOption(this, 'q7')">Antarctique</li>
-                    <li class="option-item" data-value="Kalahari" onclick="selectOption(this, 'q7')">Kalahari</li>
-                </ul>
-                <input type="hidden" name="q7" id="q7-value">
-            </div>
-            
-            <!-- Question 8 -->
-            <div class="question" id="q8">
-                <span class="progress-badge">Question 8/10</span>
-                <p><i class="fas fa-city"></i> Quelle ville est surnommée "La Ville Lumière" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="New York" onclick="selectOption(this, 'q8')">New York</li>
-                    <li class="option-item" data-value="Paris" onclick="selectOption(this, 'q8')">Paris</li>
-                    <li class="option-item" data-value="Tokyo" onclick="selectOption(this, 'q8')">Tokyo</li>
-                    <li class="option-item" data-value="Las Vegas" onclick="selectOption(this, 'q8')">Las Vegas</li>
-                </ul>
-                <input type="hidden" name="q8" id="q8-value">
-            </div>
-            
-            <!-- Question 9 -->
-            <div class="question" id="q9">
-                <span class="progress-badge">Question 9/10</span>
-                <p><i class="fas fa-volcano"></i> Dans quel pays se trouve le volcan Fuji ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Chine" onclick="selectOption(this, 'q9')">Chine</li>
-                    <li class="option-item" data-value="Corée du Sud" onclick="selectOption(this, 'q9')">Corée du Sud</li>
-                    <li class="option-item" data-value="Japon" onclick="selectOption(this, 'q9')">Japon</li>
-                    <li class="option-item" data-value="Taïwan" onclick="selectOption(this, 'q9')">Taïwan</li>
-                </ul>
-                <input type="hidden" name="q9" id="q9-value">
-            </div>
-            
-            <!-- Question 10 -->
-            <div class="question" id="q10">
-                <span class="progress-badge">Question 10/10</span>
-                <p><i class="fas fa-water"></i> Quel océan est le plus grand du monde ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Océan Atlantique" onclick="selectOption(this, 'q10')">Océan Atlantique</li>
-                    <li class="option-item" data-value="Océan Indien" onclick="selectOption(this, 'q10')">Océan Indien</li>
-                    <li class="option-item" data-value="Océan Pacifique" onclick="selectOption(this, 'q10')">Océan Pacifique</li>
-                    <li class="option-item" data-value="Océan Arctique" onclick="selectOption(this, 'q10')">Océan Arctique</li>
-                </ul>
-                <input type="hidden" name="q10" id="q10-value">
-            </div>
-            
-            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
-                <i class="fas fa-check-circle"></i> Soumettre mes réponses
-            </button>
-        </form>
-    </div>
-    
-    <div id="resultContainer" class="result-container">
-        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
-        <div class="score-display">
-            <span id="score">0</span>/10
-        </div>
-        <div id="feedback" class="mb-4"></div>
-        
-        <button class="btn btn-primary mr-2" onclick="showAnswers()">
-            <i class="fas fa-eye"></i> Voir les réponses
-        </button>
-        <a href="geographie.html" class="btn btn-info mr-2">
-            <i class="fas fa-redo"></i> Refaire le quiz
-        </a>
-        <a href="index.html" class="btn btn-secondary">
-            <i class="fas fa-home"></i> Retour à l'accueil
-        </a>
-</div>
-
-<footer class="text-center">
     <div class="container">
-        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
-    </div>
-</footer>
+        <div class="progress-container">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                    role="progressbar" style="width: 0%"></div>
+            </div>
+        </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Données du quiz
-    const quizData = {
-    q1: { answer: "Mont Everest", explanation: "Le Mont Everest, situé dans l'Himalaya à la frontière du Népal et du Tibet, culmine à 8 848 mètres d'altitude." },
-    q2: { answer: "Nil", explanation: "Le Nil est considéré comme le plus long fleuve du monde avec environ 6 650 km, bien que certaines études suggèrent que l'Amazone pourrait être plus long." },
-    q3: { answer: "Canberra", explanation: "Canberra est la capitale de l'Australie, et non Sydney ou Melbourne comme beaucoup le pensent." },
-    q4: { answer: "Russie", explanation: "La Russie est le plus grand pays du monde avec une superficie de plus de 17 millions de km²." },
-    q5: { answer: "Australie", explanation: "La Grande Barrière de Corail se trouve au large de la côte nord-est de l'Australie. C'est le plus grand récif corallien du monde." },
-    q6: { answer: "Vatican", explanation: "L'État de la Cité du Vatican est le plus petit pays du monde avec seulement 0,44 km²." },
-    q7: { answer: "Antarctique", explanation: "L'Antarctique est considéré comme le plus grand désert du monde car un désert se définit par ses précipitations et non par sa température." },
-    q8: { answer: "Paris", explanation: "Paris est surnommée 'La Ville Lumière' en référence à son rôle historique pendant le siècle des Lumières et à son éclairage public précoce." },
-    q9: { answer: "Japon", explanation: "Le mont Fuji (Fujiyama) est le plus haut sommet du Japon, culminant à 3 776 mètres. C'est un symbole culturel important du pays." },
-    q10: { answer: "Océan Pacifique", explanation: "L'océan Pacifique est le plus grand et le plus profond des océans, couvrant environ un tiers de la surface de la Terre." }
-};
-    
-    // Variables globales
-    let selectedOptions = {};
-    let timerInterval;
-    let timeLeft = 300; // 5 minutes
-    
-    // Fonction pour initialiser le quiz
-    function initQuiz() {
-        updateProgressBar();
-        startTimer();
-    }
-    
-    // Fonction pour sélectionner une option
-    function selectOption(element, questionId) {
-        // Désélectionner toutes les options pour cette question
-        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-            item.classList.remove('selected');
-        });
-        
-        // Sélectionner l'option cliquée
-        element.classList.add('selected');
-        
-        // Stocker la valeur
-        const value = element.getAttribute('data-value');
-        document.getElementById(`${questionId}-value`).value = value;
-        selectedOptions[questionId] = value;
-        
-        // Mettre à jour la barre de progression
-        updateProgressBar();
-    }
-    
-    // Mettre à jour la barre de progression
-    function updateProgressBar() {
+        <div id="timerContainer" class="timer-container">
+            <span id="timer">5:00</span>
+        </div>
+
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h2>Questions sur la Géographie</h2>
+                <span class="difficulty-badge">Niveau: Intermédiaire</span>
+            </div>
+
+            <form id="quizForm">
+                <!-- Questions will be added here -->
+                <div class="navigation-buttons">
+                    <button type="button" id="prevBtn" class="btn prev-btn" onclick="navigateQuestion(-1)" disabled>
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button type="button" id="nextBtn" class="btn next-btn" onclick="navigateQuestion(1)" disabled>
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="button" id="submitBtn" class="btn submit-btn" style="display: none;"
+                        onclick="submitQuiz()">
+                        <i class="fas fa-check-circle"></i> Terminer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+            <div class="score-display">
+                <span id="score">0</span>/10
+            </div>
+            <div id="feedback" class="mb-4"></div>
+
+            <button class="btn btn-primary mr-2" onclick="showAnswers()">
+                <i class="fas fa-eye"></i> Voir les réponses
+            </button>
+            <a href="geographie.html" class="btn btn-info mr-2">
+                <i class="fas fa-redo"></i> Refaire le quiz
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Données du quiz
+        const quizData = {
+            q1: { answer: "Mont Everest", explanation: "Le Mont Everest, situé dans l'Himalaya à la frontière du Népal et du Tibet, culmine à 8 848 mètres d'altitude." },
+            q2: { answer: "Nil", explanation: "Le Nil est considéré comme le plus long fleuve du monde avec environ 6 650 km, bien que certaines études suggèrent que l'Amazone pourrait être plus long." },
+            q3: { answer: "Canberra", explanation: "Canberra est la capitale de l'Australie, et non Sydney ou Melbourne comme beaucoup le pensent." },
+            q4: { answer: "Russie", explanation: "La Russie est le plus grand pays du monde avec une superficie de plus de 17 millions de km²." },
+            q5: { answer: "Australie", explanation: "La Grande Barrière de Corail se trouve au large de la côte nord-est de l'Australie. C'est le plus grand récif corallien du monde." },
+            q6: { answer: "Vatican", explanation: "L'État de la Cité du Vatican est le plus petit pays du monde avec seulement 0,44 km²." },
+            q7: { answer: "Antarctique", explanation: "L'Antarctique est considéré comme le plus grand désert du monde car un désert se définit par ses précipitations et non par sa température." },
+            q8: { answer: "Paris", explanation: "Paris est surnommée 'La Ville Lumière' en référence à son rôle historique pendant le siècle des Lumières et à son éclairage public précoce." },
+            q9: { answer: "Japon", explanation: "Le mont Fuji (Fujiyama) est le plus haut sommet du Japon, culminant à 3 776 mètres. C'est un symbole culturel important du pays." },
+            q10: { answer: "Océan Pacifique", explanation: "L'océan Pacifique est le plus grand et le plus profond des océans, couvrant environ un tiers de la surface de la Terre." }
+        };
+
+        // Variables globales
+        let selectedOptions = {};
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes
+        let currentQuestion = 1;
         const totalQuestions = 10;
-        const answeredQuestions = Object.keys(selectedOptions).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
-        document.getElementById('progressBar').style.width = `${progress}%`;
-    }
-    
-    // Fonction pour démarrer le minuteur
-    function startTimer() {
-        const timerElement = document.getElementById('timer');
-        
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            
-            // Formater le temps (minutes:secondes)
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
-            // Changer la couleur quand il reste peu de temps
-            if (timeLeft <= 60) {
-                timerElement.style.color = '#dc3545';
-            }
-            
-            // Si le temps est écoulé
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                submitQuiz();
-            }
-        }, 1000);
-    }
-    
-    // Fonction pour soumettre le quiz
-    function submitQuiz() {
-        clearInterval(timerInterval);
-        
-        // Calculer le score
-        let score = 0;
-        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
-            if (selectedValue === quizData[questionId].answer) {
-                score++;
-            }
+
+        // Fonction pour initialiser le quiz
+        function initQuiz() {
+            updateProgressBar();
+            startTimer();
+            updateNavButtons();
+            loadQuestions();
         }
-        
-        // Afficher le score
-        document.getElementById('score').textContent = score;
-        
-        // Afficher le feedback basé sur le score
-        const feedbackElement = document.getElementById('feedback');
-        let feedbackMessage = '';
-        
-        if (score >= 8) {
-            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable expert en géographie !</div>';
-        } else if (score >= 5) {
-            feedbackMessage = '<div class="alert alert-info">Bon travail !  Vous avez de bonnes connaissances géographiques.</div>';
-        } else {
-            feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Notre planète regorge de merveilles à découvrir.</div>';
-        }
-        
-        feedbackElement.innerHTML = feedbackMessage;
-        
-        // Afficher les résultats
-        document.getElementById('quizContainer').style.display = 'none';
-        document.getElementById('resultContainer').style.display = 'block';
-    }
-    
-    // Fonction pour afficher les réponses correctes
-    function showAnswers() {
-        document.getElementById('resultContainer').style.display = 'none';
-        document.getElementById('quizContainer').style.display = 'block';
-        
-        // Désactiver tous les éléments cliquables
-        document.querySelectorAll('.option-item').forEach(item => {
-            item.onclick = null;
-            item.style.cursor = 'default';
-        });
-        
-        // Cacher le bouton de soumission
-        document.getElementById('submitBtn').style.display = 'none';
-        
-        // Pour chaque question
-        for (const [questionId, data] of Object.entries(quizData)) {
-            const correctAnswer = data.answer;
-            const selectedValue = selectedOptions[questionId] || '';
-            
-            // Marquer les réponses correctes et incorrectes
-            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-                const optionValue = item.getAttribute('data-value');
-                
-                if (optionValue === correctAnswer) {
-                    item.classList.add('correct');
-                    // Ajouter l'explication
-                    const explanation = document.createElement('div');
-                    explanation.classList.add('alert', 'alert-success', 'mt-2');
-                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
-                    document.getElementById(questionId).appendChild(explanation);
-                } else if (optionValue === selectedValue) {
-                    item.classList.add('incorrect');
+
+        // Fonction pour charger les questions
+        function loadQuestions() {
+            const quizForm = document.getElementById('quizForm');
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionData = quizData[`q${i}`];
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.id = `q${i}`;
+                if (i === 1) {
+                    questionDiv.classList.add('active');
                 }
-            });
+                questionDiv.innerHTML = `
+                    <span class="progress-badge">Question ${i}/${totalQuestions}</span>
+                    <p><i class="fas fa-globe-europe"></i> ${questionData.explanation}</p>
+                    <ul class="options">
+                        ${generateOptions(i)}
+                    </ul>
+                    <input type="hidden" name="q${i}" id="q${i}-value">
+                `;
+                quizForm.insertBefore(questionDiv, document.querySelector('.navigation-buttons'));
+            }
         }
-        
-        // Ajouter un bouton pour revenir aux résultats
-        const backButton = document.createElement('button');
-        backButton.classList.add('btn', 'btn-primary', 'mt-4');
-        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
-        backButton.onclick = function() {
+
+        // Fonction pour générer les options
+        function generateOptions(questionNumber) {
+            const options = {
+                q1: ["Mont Everest", "K2", "Mont Blanc", "Kilimandjaro"],
+                q2: ["Nil", "Amazone", "Mississippi", "Yangtsé"],
+                q3: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+                q4: ["Canada", "Chine", "États-Unis", "Russie"],
+                q5: ["Indonésie", "Australie", "Philippines", "Mexique"],
+                q6: ["Monaco", "Vatican", "Saint-Marin", "Nauru"],
+                q7: ["Sahara", "Gobi", "Antarctique", "Kalahari"],
+                q8: ["New York", "Paris", "Tokyo", "Las Vegas"],
+                q9: ["Chine", "Corée du Sud", "Japon", "Taïwan"],
+                q10: ["Océan Atlantique", "Océan Indien", "Océan Pacifique", "Océan Arctique"]
+            };
+            return options[`q${questionNumber}`].map(option => `<li class="option-item" data-value="${option}" onclick="selectOption(this, 'q${questionNumber}')">${option}</li>`).join('');
+        }
+
+        // Fonction pour sélectionner une option
+        function selectOption(element, questionId) {
+            // Désélectionner toutes les options pour cette question
+            document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Sélectionner l'option cliquée
+            element.classList.add('selected');
+
+            // Stocker la valeur
+            const value = element.getAttribute('data-value');
+            document.getElementById(`${questionId}-value`).value = value;
+            selectedOptions[questionId] = value;
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+        }
+
+        // Fonction pour naviguer entre les questions
+        function navigateQuestion(direction) {
+            // Cacher la question actuelle
+            document.getElementById(`q${currentQuestion}`).classList.remove('active');
+
+            // Calculer la nouvelle question
+            currentQuestion += direction;
+
+            // Afficher la nouvelle question
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+        }
+
+        // Fonction pour mettre à jour les boutons de navigation
+        function updateNavButtons() {
+            // Bouton précédent - désactivé si on est à la première question
+            document.getElementById('prevBtn').disabled = (currentQuestion === 1);
+
+            // Si c'est la dernière question
+            if (currentQuestion === totalQuestions) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+                // Activer le bouton soumettre uniquement si une réponse est sélectionnée
+                document.getElementById('submitBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            } else {
+                // Sinon, afficher le bouton suivant
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+                // Activer le bouton suivant uniquement si une réponse est sélectionnée
+                document.getElementById('nextBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            }
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgressBar() {
+            const progress = (Object.keys(selectedOptions).length / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Fonction pour démarrer le minuteur
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+
+                // Formater le temps (minutes:secondes)
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                // Changer la couleur quand il reste peu de temps
+                if (timeLeft <= 60) {
+                    timerElement.style.color = '#dc3545';
+                }
+
+                // Si le temps est écoulé
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Fonction pour soumettre le quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+
+            // Calculer le score
+            let score = 0;
+            for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+                if (selectedValue === quizData[questionId].answer) {
+                    score++;
+                }
+            }
+
+            // Afficher le score
+            document.getElementById('score').textContent = score;
+
+            // Afficher le feedback basé sur le score
+            const feedbackElement = document.getElementById('feedback');
+            let feedbackMessage = '';
+
+            if (score >= 8) {
+                feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable expert en géographie !</div>';
+            } else if (score >= 5) {
+                feedbackMessage = '<div class="alert alert-info">Bon travail !  Vous avez de bonnes connaissances géographiques.</div>';
+            } else {
+                feedbackMessage = '<div class="alert alert-warning">Continuez à apprendre ! Notre planète regorge de merveilles à découvrir.</div>';
+            }
+
+            feedbackElement.innerHTML = feedbackMessage;
+
+            // Afficher les résultats
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('resultContainer').style.display = 'block';
-        };
-        document.getElementById('quizForm').appendChild(backButton);
-    }
-    
-    // Démarrer le quiz au chargement de la page
-    window.onload = initQuiz;
-</script>
+        }
+
+        // Fonction pour afficher les réponses correctes
+        function showAnswers() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+
+            // Afficher toutes les questions
+            document.querySelectorAll('.question').forEach(question => {
+                question.classList.add('active');
+                question.style.marginBottom = '50px'; // Espacement entre les questions
+            });
+
+            // Cacher les boutons de navigation
+            document.querySelector('.navigation-buttons').style.display = 'none';
+
+            // Désactiver tous les éléments cliquables
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.onclick = null;
+                item.style.cursor = 'default';
+            });
+
+            // Pour chaque question
+            for (const [questionId, data] of Object.entries(quizData)) {
+                const correctAnswer = data.answer;
+                const selectedValue = selectedOptions[questionId] || '';
+
+                // Marquer les réponses correctes et incorrectes
+                document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                    const optionValue = item.getAttribute('data-value');
+
+                    if (optionValue === correctAnswer) {
+                        item.classList.add('correct');
+                        // Ajouter l'explication
+                        const explanation = document.createElement('div');
+                        explanation.classList.add('alert', 'alert-success', 'mt-2');
+                        explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                        document.getElementById(questionId).appendChild(explanation);
+                    } else if (optionValue === selectedValue) {
+                        item.classList.add('incorrect');
+                    }
+                });
+            }
+
+            // Ajouter un bouton pour revenir aux résultats
+            const backButton = document.createElement('button');
+            backButton.classList.add('btn', 'btn-primary', 'mt-4');
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+            backButton.onclick = function () {
+                document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+            };
+            document.getElementById('quizForm').appendChild(backButton);
+        }
+
+        // Démarrer le quiz au chargement de la page
+        window.onload = initQuiz;
+    </script>
 </body>
+
 </html>

@@ -13,46 +13,58 @@
             font-family: 'Roboto', sans-serif;
             padding-bottom: 60px;
         }
-        
+
         header {
             background-color: #191970;
             color: white;
             padding: 20px 0;
             margin-bottom: 30px;
         }
-        
+
         .quiz-container {
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
             animation: fadeIn 0.5s ease;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .question {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
+            display: none; /* Hide all questions by default */
         }
-        
+
+        .question.active {
+            display: block; /* Show only the active question */
+        }
+
         .question p {
             font-size: 1.2rem;
             font-weight: 600;
             color: #333;
             margin-bottom: 15px;
         }
-        
+
         .options {
             list-style-type: none;
             padding-left: 0;
         }
-        
+
         .option-item {
             padding: 10px 15px;
             margin-bottom: 10px;
@@ -61,60 +73,67 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .option-item:hover {
             background-color: #f1f1f1;
         }
-        
+
         .option-item.selected {
             background-color: #007bff;
             color: white;
             border-color: #007bff;
         }
-        
+
         .option-item.correct {
             background-color: #28a745;
             color: white;
             border-color: #28a745;
         }
-        
+
         .option-item.incorrect {
             background-color: #dc3545;
             color: white;
             border-color: #dc3545;
         }
-        
-        .submit-btn {
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
             margin-top: 20px;
+        }
+
+        .prev-btn,
+        .next-btn,
+        .submit-btn {
             padding: 10px 30px;
             font-size: 1.1rem;
         }
-        
+
         .result-container {
             display: none;
             background-color: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             margin-top: 30px;
         }
-        
+
         .score-display {
             font-size: 2rem;
             font-weight: bold;
             margin: 20px 0;
         }
-        
+
         .progress-container {
             margin: 20px 0;
         }
-        
+
         .timer-container {
             position: fixed;
             top: 100px;
             right: 20px;
-            background-color: rgba(25,25,112,0.8);
+            background-color: rgba(25, 25, 112, 0.8);
             color: white;
             padding: 15px;
             border-radius: 50%;
@@ -126,7 +145,7 @@
             font-size: 1.5rem;
             z-index: 1000;
         }
-        
+
         footer {
             background-color: #191970;
             color: white;
@@ -135,14 +154,14 @@
             bottom: 0;
             width: 100%;
         }
-        
+
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .difficulty-badge {
             background-color: #6a0dad;
             color: white;
@@ -150,18 +169,26 @@
             border-radius: 20px;
             font-size: 0.9rem;
         }
-        
+
         /* Animation pour les réponses */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
-        
+
         .pulse {
             animation: pulse 0.5s;
         }
-        
+
         /* Style pour les boutons de navigation */
         .nav-button {
             background-color: #343a40;
@@ -172,12 +199,12 @@
             margin: 0 5px;
             transition: all 0.3s;
         }
-        
+
         .nav-button:hover {
             background-color: #212529;
             transform: translateY(-2px);
         }
-        
+
         /* Badge du niveau de progression */
         .progress-badge {
             background-color: #6a0dad;
@@ -188,363 +215,460 @@
             margin-bottom: 10px;
             display: inline-block;
         }
+
+        /* Style spécifique pour les boutons de navigation */
+        .prev-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .next-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+        }
     </style>
     <!-- Fin de syle pour la page musique -->
 </head>
 <!-- Coder, c'est comme écrire de la poésie. -->
+
 <body>
 
-<header class="text-center">
-    <div class="container">
-        <h1><i class="fas fa-music"></i> Quiz sur la Musique</h1>
-        <p class="lead">Testez vos connaissances sur le monde de la musique</p>
-        <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
-    </div>
-</header>
+    <header class="text-center">
+        <div class="container">
+            <h1><i class="fas fa-music"></i> Quiz sur la Musique</h1>
+            <p class="lead">Testez vos connaissances sur le monde de la musique</p>
+            <a href="index.html" class="btn btn-outline-light"><i class="fas fa-home"></i> Retour à l'accueil</a>
+        </div>
+    </header>
 
-<div class="container">
-    <div class="progress-container">
-        <div class="progress">
-            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                    role="progressbar" style="width: 0%"></div>
+            </div>
         </div>
-    </div>
-    
-    <div id="timerContainer" class="timer-container">
-        <span id="timer">300</span>
-    </div>
-    
-    <div id="quizContainer" class="quiz-container">
-        <div class="quiz-header">
-            <h2>Questions sur la Musique</h2>
-            <span class="difficulty-badge">Niveau: Intermédiaire</span>
+
+        <div id="timerContainer" class="timer-container">
+            <span id="timer">5:00</span>
         </div>
-        
-        <form id="quizForm">
-            <!-- Question 1 -->
-            <div class="question" id="q1">
-                <span class="progress-badge">Question 1/10</span>
-                <p><i class="fas fa-award"></i> Quel artiste a remporté le plus de Grammy Awards dans l'histoire ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Beyoncé" onclick="selectOption(this, 'q1')">Beyoncé</li>
-                    <li class="option-item" data-value="Michael Jackson" onclick="selectOption(this, 'q1')">Michael Jackson</li>
-                    <li class="option-item" data-value="Quincy Jones" onclick="selectOption(this, 'q1')">Quincy Jones</li>
-                    <li class="option-item" data-value="Stevie Wonder" onclick="selectOption(this, 'q1')">Stevie Wonder</li>
-                </ul>
-                <input type="hidden" name="q1" id="q1-value">
+
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h2>Questions sur la Musique</h2>
+                <span class="difficulty-badge">Niveau: Intermédiaire</span>
             </div>
-            
-            <!-- Question 2 -->
-            <div class="question" id="q2">
-                <span class="progress-badge">Question 2/10</span>
-                <p><i class="fas fa-guitar"></i> Quel groupe de rock est considéré comme le plus vendu de tous les temps ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Led Zeppelin" onclick="selectOption(this, 'q2')">Led Zeppelin</li>
-                    <li class="option-item" data-value="The Rolling Stones" onclick="selectOption(this, 'q2')">The Rolling Stones</li>
-                    <li class="option-item" data-value="The Beatles" onclick="selectOption(this, 'q2')">The Beatles</li>
-                    <li class="option-item" data-value="Queen" onclick="selectOption(this, 'q2')">Queen</li>
-                </ul>
-                <input type="hidden" name="q2" id="q2-value">
+
+            <form id="quizForm">
+                <!-- Question 1 -->
+                <div class="question active" id="q1">
+                    <span class="progress-badge">Question 1/10</span>
+                    <p><i class="fas fa-award"></i> Quel artiste a remporté le plus de Grammy Awards dans
+                        l'histoire ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Beyoncé" onclick="selectOption(this, 'q1')">Beyoncé</li>
+                        <li class="option-item" data-value="Michael Jackson" onclick="selectOption(this, 'q1')">Michael
+                            Jackson</li>
+                        <li class="option-item" data-value="Quincy Jones" onclick="selectOption(this, 'q1')">Quincy Jones
+                        </li>
+                        <li class="option-item" data-value="Stevie Wonder" onclick="selectOption(this, 'q1')">Stevie
+                            Wonder</li>
+                    </ul>
+                    <input type="hidden" name="q1" id="q1-value">
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question" id="q2">
+                    <span class="progress-badge">Question 2/10</span>
+                    <p><i class="fas fa-guitar"></i> Quel groupe de rock est considéré comme le plus vendu de tous les
+                        temps ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Led Zeppelin" onclick="selectOption(this, 'q2')">Led
+                            Zeppelin</li>
+                        <li class="option-item" data-value="The Rolling Stones" onclick="selectOption(this, 'q2')">The
+                            Rolling Stones</li>
+                        <li class="option-item" data-value="The Beatles" onclick="selectOption(this, 'q2')">The Beatles
+                        </li>
+                        <li class="option-item" data-value="Queen" onclick="selectOption(this, 'q2')">Queen</li>
+                    </ul>
+                    <input type="hidden" name="q2" id="q2-value">
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question" id="q3">
+                    <span class="progress-badge">Question 3/10</span>
+                    <p><i class="fas fa-drum"></i> Combien de membres composent un quatuor à cordes classique ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="3" onclick="selectOption(this, 'q3')">3</li>
+                        <li class="option-item" data-value="4" onclick="selectOption(this, 'q3')">4</li>
+                        <li class="option-item" data-value="5" onclick="selectOption(this, 'q3')">5</li>
+                        <li class="option-item" data-value="6" onclick="selectOption(this, 'q3')">6</li>
+                    </ul>
+                    <input type="hidden" name="q3" id="q3-value">
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question" id="q4">
+                    <span class="progress-badge">Question 4/10</span>
+                    <p><i class="fas fa-microphone"></i> Qui est considéré comme le "Roi de la Pop" ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Elvis Presley" onclick="selectOption(this, 'q4')">Elvis
+                            Presley</li>
+                        <li class="option-item" data-value="Prince" onclick="selectOption(this, 'q4')">Prince</li>
+                        <li class="option-item" data-value="Michael Jackson" onclick="selectOption(this, 'q4')">Michael
+                            Jackson</li>
+                        <li class="option-item" data-value="Justin Timberlake" onclick="selectOption(this, 'q4')">Justin
+                            Timberlake</li>
+                    </ul>
+                    <input type="hidden" name="q4" id="q4-value">
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question" id="q5">
+                    <span class="progress-badge">Question 5/10</span>
+                    <p><i class="fas fa-record-vinyl"></i> Combien de notes y a-t-il dans une gamme majeure ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="5" onclick="selectOption(this, 'q5')">5</li>
+                        <li class="option-item" data-value="7" onclick="selectOption(this, 'q5')">7</li>
+                        <li class="option-item" data-value="8" onclick="selectOption(this, 'q5')">8</li>
+                        <li class="option-item" data-value="12" onclick="selectOption(this, 'q5')">12</li>
+                    </ul>
+                    <input type="hidden" name="q5" id="q5-value">
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question" id="q6">
+                    <span class="progress-badge">Question 6/10</span>
+                    <p><i class="fas fa-compact-disc"></i> Quel est le nom du prix le plus prestigieux dans
+                        l'industrie de la musique classique ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Prix Echo Klassik" onclick="selectOption(this, 'q6')">Prix Echo
+                            Klassik</li>
+                        <li class="option-item" data-value="Diapason d'Or" onclick="selectOption(this, 'q6')">Diapason
+                            d'Or</li>
+                        <li class="option-item" data-value="Grammy Award Classique" onclick="selectOption(this, 'q6')">
+                            Grammy Award Classique</li>
+                        <li class="option-item" data-value="Prix Gramophone" onclick="selectOption(this, 'q6')">Prix
+                            Gramophone</li>
+                    </ul>
+                    <input type="hidden" name="q6" id="q6-value">
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question" id="q7">
+                    <span class="progress-badge">Question 7/10</span>
+                    <p><i class="fas fa-headphones"></i> Combien de symphonies Beethoven a-t-il composées ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="7" onclick="selectOption(this, 'q7')">7</li>
+                        <li class="option-item" data-value="9" onclick="selectOption(this, 'q7')">9</li>
+                        <li class="option-item" data-value="12" onclick="selectOption(this, 'q7')">12</li>
+                        <li class="option-item" data-value="15" onclick="selectOption(this, 'q7')">15</li>
+                    </ul>
+                    <input type="hidden" name="q7" id="q7-value">
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question" id="q8">
+                    <span class="progress-badge">Question 8/10</span>
+                    <p><i class="fas fa-play"></i> Combien d'albums studio les Beatles ont-ils sortis ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="10" onclick="selectOption(this, 'q8')">10</li>
+                        <li class="option-item" data-value="13" onclick="selectOption(this, 'q8')">13</li>
+                        <li class="option-item" data-value="15" onclick="selectOption(this, 'q8')">15</li>
+                        <li class="option-item" data-value="18" onclick="selectOption(this, 'q8')">18</li>
+                    </ul>
+                    <input type="hidden" name="q8" id="q8-value">
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question" id="q9">
+                    <span class="progress-badge">Question 9/10</span>
+                    <p><i class="fas fa-broadcast-tower"></i> Dans quel pays est né le genre musical reggae ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Jamaïque" onclick="selectOption(this, 'q9')">Jamaïque</li>
+                        <li class="option-item" data-value="Cuba" onclick="selectOption(this, 'q9')">Cuba</li>
+                        <li class="option-item" data-value="Trinité-et-Tobago" onclick="selectOption(this, 'q9')">
+                            Trinité-et-Tobago</li>
+                        <li class="option-item" data-value="Barbade" onclick="selectOption(this, 'q9')">Barbade</li>
+                    </ul>
+                    <input type="hidden" name="q9" id="q9-value">
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question" id="q10">
+                    <span class="progress-badge">Question 10/10</span>
+                    <p><i class="fas fa-star"></i> Quelle chanteuse française a remporté l'Eurovision en 1977 ?</p>
+                    <ul class="options">
+                        <li class="option-item" data-value="Françoise Hardy" onclick="selectOption(this, 'q10')">Françoise
+                            Hardy</li>
+                        <li class="option-item" data-value="Sylvie Vartan" onclick="selectOption(this, 'q10')">Sylvie
+                            Vartan</li>
+                        <li class="option-item" data-value="Marie Myriam" onclick="selectOption(this, 'q10')">Marie
+                            Myriam</li>
+                        <li class="option-item" data-value="Mireille Mathieu" onclick="selectOption(this, 'q10')">Mireille
+                            Mathieu</li>
+                    </ul>
+                    <input type="hidden" name="q10" id="q10-value">
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="prevBtn" class="btn prev-btn" onclick="navigateQuestion(-1)" disabled>
+                        <i class="fas fa-arrow-left"></i> Précédent
+                    </button>
+                    <button type="button" id="nextBtn" class="btn next-btn" onclick="navigateQuestion(1)" disabled>
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="button" id="submitBtn" class="btn submit-btn" style="display: none;"
+                        onclick="submitQuiz()">
+                        <i class="fas fa-check-circle"></i> Terminer
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultContainer" class="result-container">
+            <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
+            <div class="score-display">
+                <span id="score">0</span>/10
             </div>
-            
-            <!-- Question 3 -->
-            <div class="question" id="q3">
-                <span class="progress-badge">Question 3/10</span>
-                <p><i class="fas fa-drum"></i> Combien de membres composent un quatuor à cordes classique ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="3" onclick="selectOption(this, 'q3')">3</li>
-                    <li class="option-item" data-value="4" onclick="selectOption(this, 'q3')">4</li>
-                    <li class="option-item" data-value="5" onclick="selectOption(this, 'q3')">5</li>
-                    <li class="option-item" data-value="6" onclick="selectOption(this, 'q3')">6</li>
-                </ul>
-                <input type="hidden" name="q3" id="q3-value">
-            </div>
-            
-            <!-- Question 4 -->
-            <div class="question" id="q4">
-                <span class="progress-badge">Question 4/10</span>
-                <p><i class="fas fa-microphone"></i> Qui est considéré comme le "Roi de la Pop" ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Elvis Presley" onclick="selectOption(this, 'q4')">Elvis Presley</li>
-                    <li class="option-item" data-value="Prince" onclick="selectOption(this, 'q4')">Prince</li>
-                    <li class="option-item" data-value="Michael Jackson" onclick="selectOption(this, 'q4')">Michael Jackson</li>
-                    <li class="option-item" data-value="Justin Timberlake" onclick="selectOption(this, 'q4')">Justin Timberlake</li>
-                </ul>
-                <input type="hidden" name="q4" id="q4-value">
-            </div>
-            
-            <!-- Question 5 -->
-            <div class="question" id="q5">
-                <span class="progress-badge">Question 5/10</span>
-                <p><i class="fas fa-record-vinyl"></i> Combien de notes y a-t-il dans une gamme majeure ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="5" onclick="selectOption(this, 'q5')">5</li>
-                    <li class="option-item" data-value="7" onclick="selectOption(this, 'q5')">7</li>
-                    <li class="option-item" data-value="8" onclick="selectOption(this, 'q5')">8</li>
-                    <li class="option-item" data-value="12" onclick="selectOption(this, 'q5')">12</li>
-                </ul>
-                <input type="hidden" name="q5" id="q5-value">
-            </div>
-            
-            <!-- Question 6 -->
-            <div class="question" id="q6">
-                <span class="progress-badge">Question 6/10</span>
-                <p><i class="fas fa-compact-disc"></i> Quel est le nom du prix le plus prestigieux dans l'industrie de la musique classique ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Prix Echo Klassik" onclick="selectOption(this, 'q6')">Prix Echo Klassik</li>
-                    <li class="option-item" data-value="Diapason d'Or" onclick="selectOption(this, 'q6')">Diapason d'Or</li>
-                    <li class="option-item" data-value="Grammy Award Classique" onclick="selectOption(this, 'q6')">Grammy Award Classique</li>
-                    <li class="option-item" data-value="Prix Gramophone" onclick="selectOption(this, 'q6')">Prix Gramophone</li>
-                </ul>
-                <input type="hidden" name="q6" id="q6-value">
-            </div>
-            
-            <!-- Question 7 -->
-            <div class="question" id="q7">
-                <span class="progress-badge">Question 7/10</span>
-                <p><i class="fas fa-headphones"></i> Combien de symphonies Beethoven a-t-il composées ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="7" onclick="selectOption(this, 'q7')">7</li>
-                    <li class="option-item" data-value="9" onclick="selectOption(this, 'q7')">9</li>
-                    <li class="option-item" data-value="12" onclick="selectOption(this, 'q7')">12</li>
-                    <li class="option-item" data-value="15" onclick="selectOption(this, 'q7')">15</li>
-                </ul>
-                <input type="hidden" name="q7" id="q7-value">
-            </div>
-            
-            <!-- Question 8 -->
-            <div class="question" id="q8">
-                <span class="progress-badge">Question 8/10</span>
-                <p><i class="fas fa-play"></i> Combien d'albums studio les Beatles ont-ils sortis ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="10" onclick="selectOption(this, 'q8')">10</li>
-                    <li class="option-item" data-value="13" onclick="selectOption(this, 'q8')">13</li>
-                    <li class="option-item" data-value="15" onclick="selectOption(this, 'q8')">15</li>
-                    <li class="option-item" data-value="18" onclick="selectOption(this, 'q8')">18</li>
-                </ul>
-                <input type="hidden" name="q8" id="q8-value">
-            </div>
-            
-            <!-- Question 9 -->
-            <div class="question" id="q9">
-                <span class="progress-badge">Question 9/10</span>
-                <p><i class="fas fa-broadcast-tower"></i> Dans quel pays est né le genre musical reggae ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Jamaïque" onclick="selectOption(this, 'q9')">Jamaïque</li>
-                    <li class="option-item" data-value="Cuba" onclick="selectOption(this, 'q9')">Cuba</li>
-                    <li class="option-item" data-value="Trinité-et-Tobago" onclick="selectOption(this, 'q9')">Trinité-et-Tobago</li>
-                    <li class="option-item" data-value="Barbade" onclick="selectOption(this, 'q9')">Barbade</li>
-                </ul>
-                <input type="hidden" name="q9" id="q9-value">
-            </div>
-            
-            <!-- Question 10 -->
-            <div class="question" id="q10">
-                <span class="progress-badge">Question 10/10</span>
-                <p><i class="fas fa-star"></i> Quelle chanteuse française a remporté l'Eurovision en 1977 ?</p>
-                <ul class="options">
-                    <li class="option-item" data-value="Françoise Hardy" onclick="selectOption(this, 'q10')">Françoise Hardy</li>
-                    <li class="option-item" data-value="Sylvie Vartan" onclick="selectOption(this, 'q10')">Sylvie Vartan</li>
-                    <li class="option-item" data-value="Marie Myriam" onclick="selectOption(this, 'q10')">Marie Myriam</li>
-                    <li class="option-item" data-value="Mireille Mathieu" onclick="selectOption(this, 'q10')">Mireille Mathieu</li>
-                </ul>
-                <input type="hidden" name="q10" id="q10-value">
-            </div>
-            
-            <button type="button" id="submitBtn" class="btn btn-success btn-lg submit-btn" onclick="submitQuiz()">
-                <i class="fas fa-check-circle"></i> Soumettre mes réponses
+            <div id="feedback" class="mb-4"></div>
+
+            <button class="btn btn-primary mr-2" onclick="showAnswers()">
+                <i class="fas fa-eye"></i> Voir les réponses
             </button>
-        </form>
-    </div>
-    
-    <div id="resultContainer" class="result-container">
-        <h2><i class="fas fa-medal"></i> Résultats du Quiz</h2>
-        <div class="score-display">
-            <span id="score">0</span>/10
+            <a href="musique.html" class="btn btn-info mr-2">
+                <i class="fas fa-redo"></i> Refaire le quiz
+            </a>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Retour à l'accueil
+            </a>
         </div>
-        <div id="feedback" class="mb-4"></div>
-        
-        <button class="btn btn-primary mr-2" onclick="showAnswers()">
-            <i class="fas fa-eye"></i> Voir les réponses
-        </button>
-        <a href="musique.html" class="btn btn-info mr-2">
-            <i class="fas fa-redo"></i> Refaire le quiz
-        </a>
-        <a href="index.html" class="btn btn-secondary">
-            <i class="fas fa-home"></i> Retour à l'accueil
-        </a>
     </div>
-</div>
 
-<footer class="text-center">
-    <div class="container">
-        <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
-    </div>
-</footer>
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; 2025 Quiz Interactif. Tous droits réservés.</p>
+        </div>
+    </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Données du quiz
-    const quizData = {
-        q1: { answer: "Beyoncé", explanation: "Beyoncé détient le record avec 32 Grammy Awards remportés au cours de sa carrière." },
-        q2: { answer: "The Beatles", explanation: "The Beatles sont considérés comme le groupe de rock le plus vendu de tous les temps avec plus de 600 millions d'albums vendus dans le monde." },
-        q3: { answer: "4", explanation: "Un quatuor à cordes classique est composé de 4 musiciens : deux violonistes, un altiste et un violoncelliste." },
-        q4: { answer: "Michael Jackson", explanation: "Michael Jackson est universellement reconnu comme le 'Roi de la Pop' pour son impact sur la musique et la culture populaire." },
-        q5: { answer: "7", explanation: "Une gamme majeure contient 7 notes différentes (do, ré, mi, fa, sol, la, si dans la gamme de Do majeur)." },
-        q6: { answer: "Prix Gramophone", explanation: "Le Prix Gramophone est souvent considéré comme le plus prestigieux dans l'industrie de la musique classique." },
-        q7: { answer: "9", explanation: "Ludwig van Beethoven a composé 9 symphonies, la dernière (Symphonie n°9) comprenant le célèbre 'Hymne à la joie'." },
-        q8: { answer: "13", explanation: "Les Beatles ont sorti 13 albums studio au Royaume-Uni entre 1963 et 1970." },
-        q9: { answer: "Jamaïque", explanation: "Le reggae est né en Jamaïque à la fin des années 1960, avec Bob Marley comme l'un de ses ambassadeurs les plus célèbres." },
-        q10: { answer: "Marie Myriam", explanation: "Marie Myriam a remporté l'Eurovision 1977 pour la France avec la chanson 'L'oiseau et l'enfant'." }
-    };
-    
-    // Variables globales
-    let selectedOptions = {};
-    let timerInterval;
-    let timeLeft = 300; // 5 minutes
-    
-    // Fonction pour initialiser le quiz
-    function initQuiz() {
-        updateProgressBar();
-        startTimer();
-    }
-    
-    // Fonction pour sélectionner une option
-    function selectOption(element, questionId) {
-        // Désélectionner toutes les options pour cette question
-        document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-            item.classList.remove('selected');
-        });
-        
-        // Sélectionner l'option cliquée
-        element.classList.add('selected');
-        
-        // Stocker la valeur
-        const value = element.getAttribute('data-value');
-        document.getElementById(`${questionId}-value`).value = value;
-        selectedOptions[questionId] = value;
-        
-        // Mettre à jour la barre de progression
-        updateProgressBar();
-    }
-    
-    // Mettre à jour la barre de progression
-    function updateProgressBar() {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Données du quiz
+        const quizData = {
+            q1: { answer: "Beyoncé", explanation: "Beyoncé détient le record avec 32 Grammy Awards remportés au cours de sa carrière." },
+            q2: { answer: "The Beatles", explanation: "The Beatles sont considérés comme le groupe de rock le plus vendu de tous les temps avec plus de 600 millions d'albums vendus dans le monde." },
+            q3: { answer: "4", explanation: "Un quatuor à cordes classique est composé de 4 musiciens : deux violonistes, un altiste et un violoncelliste." },
+            q4: { answer: "Michael Jackson", explanation: "Michael Jackson est universellement reconnu comme le 'Roi de la Pop' pour son impact sur la musique et la culture populaire." },
+            q5: { answer: "7", explanation: "Une gamme majeure contient 7 notes différentes (do, ré, mi, fa, sol, la, si dans la gamme de Do majeur)." },
+            q6: { answer: "Prix Gramophone", explanation: "Le Prix Gramophone est souvent considéré comme le plus prestigieux dans l'industrie de la musique classique." },
+            q7: { answer: "9", explanation: "Ludwig van Beethoven a composé 9 symphonies, la dernière (Symphonie n°9) comprenant le célèbre 'Hymne à la joie'." },
+            q8: { answer: "13", explanation: "Les Beatles ont sorti 13 albums studio au Royaume-Uni entre 1963 et 1970." },
+            q9: { answer: "Jamaïque", explanation: "Le reggae est né en Jamaïque à la fin des années 1960, avec Bob Marley comme l'un de ses ambassadeurs les plus célèbres." },
+            q10: { answer: "Marie Myriam", explanation: "Marie Myriam a remporté l'Eurovision 1977 pour la France avec la chanson 'L'oiseau et l'enfant'." }
+        };
+
+        // Variables globales
+        let selectedOptions = {};
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes
+        let currentQuestion = 1;
         const totalQuestions = 10;
-        const answeredQuestions = Object.keys(selectedOptions).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
-        document.getElementById('progressBar').style.width = `${progress}%`;
-    }
-    
-    // Fonction pour démarrer le minuteur
-    function startTimer() {
-        const timerElement = document.getElementById('timer');
-        
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            
-            // Formater le temps (minutes:secondes)
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            
-            // Changer la couleur quand il reste peu de temps
-            if (timeLeft <= 60) {
-                timerElement.style.color = '#dc3545';
-            }
-            
-            // Si le temps est écoulé
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                submitQuiz();
-            }
-        }, 1000);
-    }
-    
-    // Fonction pour soumettre le quiz
-    function submitQuiz() {
-        clearInterval(timerInterval);
-        
-        // Calculer le score
-        let score = 0;
-        for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
-            if (selectedValue === quizData[questionId].answer) {
-                score++;
-            }
+
+        // Fonction pour initialiser le quiz
+        function initQuiz() {
+            updateProgressBar();
+            startTimer();
+            updateNavButtons();
         }
-        
-        // Afficher le score
-        document.getElementById('score').textContent = score;
-        
-        // Afficher le feedback basé sur le score
-        const feedbackElement = document.getElementById('feedback');
-        let feedbackMessage = '';
-        
-        if (score >= 8) {
-            feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable mélomane !</div>';
-        } else if (score >= 5) {
-            feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances musicales.</div>';
-        } else {
-            feedbackMessage = '<div class="alert alert-warning">Continuez à explorer ! Le monde de la musique est vaste et passionnant.</div>';
-        }
-        
-        feedbackElement.innerHTML = feedbackMessage;
-        
-        // Afficher les résultats
-        document.getElementById('quizContainer').style.display = 'none';
-        document.getElementById('resultContainer').style.display = 'block';
-    }
-    
-    // Fonction pour afficher les réponses correctes
-    function showAnswers() {
-        document.getElementById('resultContainer').style.display = 'none';
-        document.getElementById('quizContainer').style.display = 'block';
-        
-        // Désactiver tous les éléments cliquables
-        document.querySelectorAll('.option-item').forEach(item => {
-            item.onclick = null;
-            item.style.cursor = 'default';
-        });
-        
-        // Cacher le bouton de soumission
-        document.getElementById('submitBtn').style.display = 'none';
-        
-        // Pour chaque question
-        for (const [questionId, data] of Object.entries(quizData)) {
-            const correctAnswer = data.answer;
-            const selectedValue = selectedOptions[questionId] || '';
-            
-            // Marquer les réponses correctes et incorrectes
+
+        // Fonction pour sélectionner une option
+        function selectOption(element, questionId) {
+            // Désélectionner toutes les options pour cette question
             document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
-                const optionValue = item.getAttribute('data-value');
-                
-                if (optionValue === correctAnswer) {
-                    item.classList.add('correct');
-                    // Ajouter l'explication
-                    const explanation = document.createElement('div');
-                    explanation.classList.add('alert', 'alert-success', 'mt-2');
-                    explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
-                    document.getElementById(questionId).appendChild(explanation);
-                } else if (optionValue === selectedValue) {
-                    item.classList.add('incorrect');
-                }
+                item.classList.remove('selected');
             });
+
+            // Sélectionner l'option cliquée
+            element.classList.add('selected');
+
+            // Stocker la valeur
+            const value = element.textContent;
+            document.getElementById(`${questionId}-value`).value = value;
+            selectedOptions[questionId] = value;
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
         }
-        
-        // Ajouter un bouton pour revenir aux résultats
-        const backButton = document.createElement('button');
-        backButton.classList.add('btn', 'btn-primary', 'mt-4');
-        backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
-        backButton.onclick = function() {
+
+        // Fonction pour naviguer entre les questions
+        function navigateQuestion(direction) {
+            // Cacher la question actuelle
+            document.getElementById(`q${currentQuestion}`).classList.remove('active');
+
+            // Calculer la nouvelle question
+            currentQuestion += direction;
+
+            // Afficher la nouvelle question
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+
+            // Mettre à jour les boutons de navigation
+            updateNavButtons();
+
+            // Mettre à jour la barre de progression
+            updateProgressBar();
+        }
+
+        // Fonction pour mettre à jour les boutons de navigation
+        function updateNavButtons() {
+            // Bouton précédent - désactivé si on est à la première question
+            document.getElementById('prevBtn').disabled = (currentQuestion === 1);
+
+            // Si c'est la dernière question
+            if (currentQuestion === totalQuestions) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+                // Activer le bouton soumettre uniquement si une réponse est sélectionnée
+                document.getElementById('submitBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            } else {
+                // Sinon, afficher le bouton suivant
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+                // Activer le bouton suivant uniquement si une réponse est sélectionnée
+                document.getElementById('nextBtn').disabled = !selectedOptions[`q${currentQuestion}`];
+            }
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgressBar() {
+            const progress = (Object.keys(selectedOptions).length / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Fonction pour démarrer le minuteur
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+
+                // Formater le temps (minutes:secondes)
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                // Changer la couleur quand il reste peu de temps
+                if (timeLeft <= 60) {
+                    timerElement.style.color = '#dc3545';
+                }
+
+                // Si le temps est écoulé
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        // Fonction pour soumettre le quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+
+            // Calculer le score
+            let score = 0;
+            for (const [questionId, selectedValue] of Object.entries(selectedOptions)) {
+                if (selectedValue === quizData[questionId].answer) {
+                    score++;
+                }
+            }
+
+            // Afficher le score
+            document.getElementById('score').textContent = score;
+
+            // Afficher le feedback basé sur le score
+            const feedbackElement = document.getElementById('feedback');
+            let feedbackMessage = '';
+
+            if (score >= 8) {
+                feedbackMessage = '<div class="alert alert-success">Excellent ! Vous êtes un véritable mélomane !</div>';
+            } else if (score >= 5) {
+                feedbackMessage = '<div class="alert alert-info">Bon travail ! Vous avez de bonnes connaissances musicales.</div>';
+            } else {
+                feedbackMessage = '<div class="alert alert-warning">Continuez à explorer ! Le monde de la musique est vaste et passionnant.</div>';
+            }
+
+            feedbackElement.innerHTML = feedbackMessage;
+
+            // Afficher les résultats
             document.getElementById('quizContainer').style.display = 'none';
             document.getElementById('resultContainer').style.display = 'block';
-        };
-        document.getElementById('quizForm').appendChild(backButton);
-    }
-    
-    // Démarrer le quiz au chargement de la page
-    window.onload = initQuiz;
-</script>
+        }
+
+        // Fonction pour afficher les réponses correctes
+        function showAnswers() {
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+
+            // Afficher toutes les questions
+            document.querySelectorAll('.question').forEach(question => {
+                question.classList.add('active');
+                question.style.marginBottom = '50px'; // Espacement entre les questions
+            });
+
+            // Cacher les boutons de navigation
+            document.querySelector('.navigation-buttons').style.display = 'none';
+
+            // Désactiver tous les éléments cliquables
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.onclick = null;
+                item.style.cursor = 'default';
+            });
+
+            // Pour chaque question
+            for (const [questionId, data] of Object.entries(quizData)) {
+                const correctAnswer = data.answer;
+                const selectedValue = selectedOptions[questionId] || '';
+
+                // Marquer les réponses correctes et incorrectes
+                document.querySelectorAll(`#${questionId} .option-item`).forEach(item => {
+                    const optionValue = item.textContent.trim();
+
+                    if (optionValue === correctAnswer) {
+                        item.classList.add('correct');
+                        // Ajouter l'explication
+                        const explanation = document.createElement('div');
+                        explanation.classList.add('alert', 'alert-success', 'mt-2');
+                        explanation.innerHTML = `<i class="fas fa-info-circle"></i> ${data.explanation}`;
+                        document.getElementById(questionId).appendChild(explanation);
+                    } else if (optionValue === selectedValue) {
+                        item.classList.add('incorrect');
+                    }
+                });
+            }
+
+            // Ajouter un bouton pour revenir aux résultats
+            const backButton = document.createElement('button');
+            backButton.classList.add('btn', 'btn-primary', 'mt-4');
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Revenir aux résultats';
+            backButton.onclick = function () {
+                document.getElementById('quizContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+            };
+            document.getElementById('quizForm').appendChild(backButton);
+        }
+
+        // Démarrer le quiz au chargement de la page
+        window.onload = initQuiz;
+    </script>
 </body>
+
 </html>
