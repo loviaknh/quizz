@@ -43,4 +43,5 @@ Ce projet m’a permis de :
 
 🧪 Projet réalisé de A à Z en autonomie dans un but d’apprentissage personnel.
 
-![Aperçu du projet](image/aperçu.png)
+![Aperçu du projet](https://loviaknh.github.io/quizz/)
+
