@@ -45,5 +45,5 @@ Ce projet m’a permis de :
 
 https://loviaknh.github.io/quizz/      
 
-```salut
+```salut```
 
