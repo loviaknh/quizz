@@ -324,6 +324,19 @@
             q10: { answer: "Océan Pacifique", explanation: "L'océan Pacifique est le plus grand et le plus profond des océans, couvrant environ un tiers de la surface de la Terre." }
         };
 
+        // Fonction pour mélanger les questions
+        function shuffleQuestions() {
+            // Créer un tableau des numéros de questions
+            let questionsOrder = Array.from({length: totalQuestions}, (_, i) => i + 1);
+            
+            // Mélanger le tableau en utilisant l'algorithme de Fisher-Yates
+            for (let i = questionsOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questionsOrder[i], questionsOrder[j]] = [questionsOrder[j], questionsOrder[i]];
+            }
+            return questionsOrder;
+        }
+
         // Variables globales
         let selectedOptions = {};
         let timerInterval;
@@ -342,21 +355,25 @@
         // Fonction pour charger les questions
         function loadQuestions() {
             const quizForm = document.getElementById('quizForm');
-            for (let i = 1; i <= totalQuestions; i++) {
-                const questionData = quizData[`q${i}`];
+            const shuffledOrder = shuffleQuestions();
+            
+            for (let i = 0; i < totalQuestions; i++) {
+                const questionNumber = shuffledOrder[i];
+                const questionData = quizData[`q${questionNumber}`];
                 const questionDiv = document.createElement('div');
                 questionDiv.classList.add('question');
-                questionDiv.id = `q${i}`;
-                if (i === 1) {
+                questionDiv.id = `q${questionNumber}`;
+                if (i === 0) { // Si c'est la première question dans l'ordre mélangé
                     questionDiv.classList.add('active');
+                    currentQuestion = questionNumber;
                 }
                 questionDiv.innerHTML = `
-                    <span class="progress-badge">Question ${i}/${totalQuestions}</span>
-                    <p><i class="fas fa-globe-europe"></i> ${questionData.explanation}</p>
+                    <span class="progress-badge">Question ${i + 1}/${totalQuestions}</span>
+                    <p><i class="fas fa-paw"></i> ${questionData.explanation}</p>
                     <ul class="options">
-                        ${generateOptions(i)}
+                        ${generateOptions(questionNumber)}
                     </ul>
-                    <input type="hidden" name="q${i}" id="q${i}-value">
+                    <input type="hidden" name="q${questionNumber}" id="q${questionNumber}-value">
                 `;
                 quizForm.insertBefore(questionDiv, document.querySelector('.navigation-buttons'));
             }
